@@ -1,0 +1,33 @@
+{
+  "source": {
+    "note": "Replace these placeholder items with your own portfolio. Each item needs a src URL and a single-letter tag (A-J, K+).",
+    "updatedAt": "2026-02-12"
+  },
+  "items": [
+    {
+      "id": "img-5597-a",
+      "tag": "A",
+      "title": "Tree & shrub install",
+      "alt": "Fresh landscaping with shrubs and trees",
+      "src": "https://static.wixstatic.com/media/61e763_a367ed429b384e30b08ea958b5736011~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_1800,h_1350,al_c,q_85,enc_avif,quality_auto/IMG_5597_JPG.jpg",
+      "thumb": "https://static.wixstatic.com/media/61e763_a367ed429b384e30b08ea958b5736011~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/IMG_5597_JPG.jpg"
+    },
+    {
+      "id": "img-5487-b",
+      "tag": "B",
+      "title": "Garden bed refresh",
+      "alt": "Clean garden bed and planting",
+      "src": "https://static.wixstatic.com/media/61e763_8f4ee2cc91aa4969b003dd66f06c031b~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_1800,h_1350,al_c,q_85,enc_avif,quality_auto/IMG_5487_JPG.jpg",
+      "thumb": "https://static.wixstatic.com/media/61e763_8f4ee2cc91aa4969b003dd66f06c031b~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/IMG_5487_JPG.jpg"
+    },
+    {
+      "id": "img-5588-i",
+      "tag": "I",
+      "title": "Decorative bed finish",
+      "alt": "Decorative landscaping bed",
+      "src": "https://static.wixstatic.com/media/61e763_2c83481afdc24a96922ef0cdeb07f200~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_1800,h_1350,al_c,q_85,enc_avif,quality_auto/IMG_5588_JPG.jpg",
+      "thumb": "https://static.wixstatic.com/media/61e763_2c83481afdc24a96922ef0cdeb07f200~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_600,h_450,al_c,q_80,enc_avif,quality_auto/IMG_5588_JPG.jpg"
+    }
+  ]
+}
+

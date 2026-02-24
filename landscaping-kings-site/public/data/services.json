@@ -1,0 +1,109 @@
+{
+  "meta": {
+    "headline": "Professional Landscaping In Central Texas",
+    "subhead": "From clean installs to reliable upkeep. Built to look sharp today and hold up for years."
+  },
+  "services": [
+    {
+      "tag": "A",
+      "title": "Shrub & Tree Installations",
+      "summary": "Right plant, right place, planted correctly. We focus on spacing, depth, and a finished bed that looks intentional.",
+      "included": [
+        "Plant selection guidance for sun, soil, and growth",
+        "Proper install, staking, and initial shaping",
+        "Bed prep, mulch, and cleanup"
+      ]
+    },
+    {
+      "tag": "B",
+      "title": "Garden Beds & Planting",
+      "summary": "New beds, refreshes, and seasonal color. Crisp edges, clean mulch lines, and plants that thrive in the Texas heat.",
+      "included": [
+        "Bed layout and edging",
+        "Soil amendments and planting",
+        "Refreshes and seasonal swaps"
+      ]
+    },
+    {
+      "tag": "C",
+      "title": "Walkways, Pavers & Flagstones",
+      "summary": "Hardscape that feels premium underfoot. We build proper base, compaction, and drainage so it stays level and solid.",
+      "included": [
+        "Pavers, flagstone, stepping paths",
+        "Base prep, leveling, and drainage planning",
+        "Poly sand / joint finishing"
+      ]
+    },
+    {
+      "tag": "D",
+      "title": "Lawn & Turf Services",
+      "summary": "Turf installs and repairs for a cleaner, fuller lawn. Focused on grading, soil, and results that actually last.",
+      "included": [
+        "Sod installation and patch repairs",
+        "Grading, leveling, and soil prep",
+        "Seasonal maintenance options"
+      ]
+    },
+    {
+      "tag": "E",
+      "title": "Soil & Mulching",
+      "summary": "Fresh mulch and healthy soil make everything else look better. We deliver, spread, and leave a clean finish.",
+      "included": [
+        "Mulch install and refreshes",
+        "Topsoil / compost spreading",
+        "Weed barrier and erosion control options"
+      ]
+    },
+    {
+      "tag": "F",
+      "title": "Tree & Stump Services",
+      "summary": "Safer, cleaner trees and a yard that feels open again. Trimming, removals, and stump solutions with full cleanup.",
+      "included": [
+        "Trimming and pruning",
+        "Stump grinding / removal options",
+        "Haul-off and debris cleanup"
+      ]
+    },
+    {
+      "tag": "G",
+      "title": "Fences & Decks",
+      "summary": "Outdoor structures that match the property. Repairs or new installs with clean lines and solid materials.",
+      "included": [
+        "Fence installs and repairs",
+        "Deck builds and touch-ups",
+        "Staining / sealing options"
+      ]
+    },
+    {
+      "tag": "H",
+      "title": "Water Features & Lighting",
+      "summary": "Add atmosphere and curb appeal. Low-voltage lighting and water features designed to look great at night.",
+      "included": [
+        "Path and accent lighting",
+        "Small water features",
+        "Layout and placement planning"
+      ]
+    },
+    {
+      "tag": "I",
+      "title": "Rock & Decorative Beds",
+      "summary": "Low-maintenance, high-impact finishes: river rock, crushed granite, boulders, and decorative borders.",
+      "included": [
+        "Rock installs and refreshes",
+        "Edging and bed definition",
+        "Weed barrier options"
+      ]
+    },
+    {
+      "tag": "J",
+      "title": "Property Maintenance & Cleanups",
+      "summary": "Fast, thorough cleanups that make the whole property feel reset. Perfect for seasonal turnarounds and prep.",
+      "included": [
+        "Seasonal cleanups and haul-off",
+        "Weeding, trimming, and shaping",
+        "Ongoing maintenance options"
+      ]
+    }
+  ]
+}
+
