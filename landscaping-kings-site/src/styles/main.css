@@ -1085,7 +1085,10 @@ html[data-mode="dark"] .tile:hover {
 
 .lightbox {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100dvh;
   display: none;
   z-index: 999;
 }
@@ -1095,15 +1098,16 @@ html[data-mode="dark"] .tile:hover {
 }
 
 .lightboxBackdrop {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background: rgba(13, 21, 18, 0.72);
   backdrop-filter: blur(10px);
 }
 
 .lightboxShell {
-  position: absolute;
+  position: fixed;
   inset: 18px;
+  max-height: calc(100dvh - 36px);
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   overflow: hidden;
@@ -1447,6 +1451,7 @@ html[data-mode="dark"] .tile:hover {
 
   .lightboxShell {
     inset: 12px;
+    max-height: calc(100dvh - 24px);
   }
 
   .lightboxStage {
