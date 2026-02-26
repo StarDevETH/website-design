@@ -322,7 +322,6 @@ function buildSlides(items) {
     img.alt = stripJobMarker(item.alt || "");
     img.loading = "eager";
     img.decoding = "async";
-    img.referrerPolicy = "no-referrer";
     if (fallbackSrc) img.src = fallbackSrc;
 
     img.addEventListener("error", () => {
@@ -333,7 +332,6 @@ function buildSlides(items) {
     if (primarySrc && primarySrc !== fallbackSrc) {
       const hiRes = new Image();
       hiRes.decoding = "async";
-      hiRes.referrerPolicy = "no-referrer";
       hiRes.onload = () => {
         if (img.isConnected) img.src = primarySrc;
       };
