@@ -205,6 +205,26 @@ function initCurrentNav() {
   });
 }
 
+function initStickyOffsets() {
+  const topBar = qs(".topBar");
+  if (!topBar) return;
+
+  const apply = () => {
+    const isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
+    const topBarHeight = isMobile ? Math.ceil(topBar.getBoundingClientRect().height) : 0;
+    document.documentElement.style.setProperty("--topbar-h", `${topBarHeight}px`);
+  };
+
+  apply();
+  window.addEventListener("resize", apply, { passive: true });
+  window.addEventListener("orientationchange", apply, { passive: true });
+  window.addEventListener("load", apply, { once: true });
+
+  if (document.fonts && typeof document.fonts.ready?.then === "function") {
+    document.fonts.ready.then(apply).catch(() => {});
+  }
+}
+
 function initReveals() {
   const els = qsa(".reveal");
   if (!els.length) return;
@@ -469,6 +489,7 @@ function renderForms() {
 
 async function run() {
   initColorMode();
+  initStickyOffsets();
   initHeader();
   initNav();
   initCurrentNav();

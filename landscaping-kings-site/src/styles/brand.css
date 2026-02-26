@@ -7,6 +7,7 @@
 */
 
 :root {
+  --topbar-h: 0px;
   --bg0: #ffffff;
   --bg1: #f7f7f7;
   --surface: rgba(255, 255, 255, 0.92);
@@ -787,6 +788,14 @@ html[data-mode="dark"] .showcaseNote {
   color: rgba(235, 242, 247, 0.76);
 }
 
+html[data-mode="dark"] .ctaBand p {
+  color: rgba(235, 242, 247, 0.86);
+}
+
+html[data-mode="dark"] .ctaBand a:not(.btn) {
+  color: rgba(196, 255, 185, 0.95);
+}
+
 html[data-mode="dark"] .siteFooter {
   background: #0d1118;
   border-top-color: rgba(255, 255, 255, 0.16);
@@ -799,6 +808,57 @@ html[data-mode="dark"] .siteFooter {
 }
 
 @media (max-width: 900px) {
+  .topBar {
+    position: sticky;
+    top: 0;
+    z-index: 260;
+  }
+
+  .siteHeader {
+    top: var(--topbar-h, 0px);
+    z-index: 250;
+  }
+
+  .filtersBar {
+    top: calc(var(--header-h) + var(--topbar-h, 0px));
+    padding: 8px 0;
+  }
+
+  #gallery-filters {
+    scroll-margin-top: calc(var(--header-h) + var(--topbar-h, 0px) + 10px);
+  }
+
+  #gallery-grid {
+    scroll-margin-top: calc(var(--header-h) + var(--topbar-h, 0px) + 90px);
+  }
+
+  .filtersRow {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filtersRow::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .filtersRow::-webkit-scrollbar-thumb {
+    background: rgba(13, 21, 18, 0.22);
+    border-radius: 999px;
+  }
+
+  .chip {
+    white-space: nowrap;
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  html[data-mode="dark"] .filtersRow::-webkit-scrollbar-thumb {
+    background: rgba(235, 242, 247, 0.28);
+  }
+
   .topBarInner {
     flex-direction: column;
     align-items: flex-start;
