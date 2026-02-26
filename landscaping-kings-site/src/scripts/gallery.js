@@ -211,6 +211,11 @@ function openLightbox(lb, slides, startIndex, meta) {
   const sideCount = qs("[data-lb-side-count]", lb);
   const nextImg = qs("[data-lb-next-img]", lb);
   const thumbRail = qs("[data-lb-thumbs]", lb);
+  const total = Math.max(0, slides.length);
+  if (!track || !total) return;
+
+  let activeIndex = clampInt(startIndex, 0, Math.max(0, total - 1));
+  const getSafeItem = (idx) => meta.items[clampInt(idx, 0, Math.max(0, meta.items.length - 1))] || {};
 
   const thumbs = [];
   if (thumbRail) {
@@ -224,28 +229,27 @@ function openLightbox(lb, slides, startIndex, meta) {
       thumbBtn.innerHTML = `
         <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
       `;
-      thumbBtn.addEventListener("click", () => scrollToIndex(track, idx, slides.length));
+      thumbBtn.addEventListener("click", () => {
+        goToIndex(idx);
+      });
       thumbRail.appendChild(thumbBtn);
       thumbs.push(thumbBtn);
     });
   }
 
-  track.replaceChildren();
-  for (const slide of slides) track.appendChild(slide);
-
   lb.classList.add("isOpen");
   lockScroll(true);
 
   const updateMeta = () => {
-    const idx = Math.max(0, Math.min(slides.length - 1, computeActiveIndex(track)));
-    const item = meta.items[idx];
-    const nextIdx = (idx + 1) % slides.length;
-    const nextItem = meta.items[nextIdx];
+    const idx = activeIndex;
+    const item = getSafeItem(idx);
+    const nextIdx = (idx + 1) % total;
+    const nextItem = getSafeItem(nextIdx);
 
-    title.textContent = `${meta.categoryLabel} - ${idx + 1}/${slides.length}`;
+    title.textContent = `${meta.categoryLabel} - ${idx + 1}/${total}`;
     caption.textContent = stripJobMarker(item.title || "");
     sub.textContent = stripJobMarker(item.alt || "");
-    if (sideCount) sideCount.textContent = `${idx + 1}/${slides.length}`;
+    if (sideCount) sideCount.textContent = `${idx + 1}/${total}`;
 
     if (nextImg && nextItem) {
       nextImg.src = nextItem.thumb || nextItem.src;
@@ -262,46 +266,46 @@ function openLightbox(lb, slides, startIndex, meta) {
     if (activeThumb) activeThumb.scrollIntoView({ block: "nearest", inline: "nearest" });
   };
 
-  const rafUpdate = () => requestAnimationFrame(updateMeta);
+  function mountActiveSlide() {
+    const slide = slides[activeIndex];
+    if (!slide) return;
+    track.replaceChildren(slide);
+    updateMeta();
+  }
+
+  function goToIndex(nextIdx) {
+    const clamped = clampInt(nextIdx, 0, Math.max(0, total - 1));
+    activeIndex = clamped;
+    mountActiveSlide();
+  }
 
   const onKeyDown = (e) => {
     if (e.key === "Escape") closeLightbox(lb);
-    if (e.key === "ArrowLeft")
-      scrollToIndex(track, computeActiveIndex(track) - 1, slides.length);
-    if (e.key === "ArrowRight")
-      scrollToIndex(track, computeActiveIndex(track) + 1, slides.length);
+    if (e.key === "ArrowLeft") goToIndex(activeIndex - 1);
+    if (e.key === "ArrowRight") goToIndex(activeIndex + 1);
   };
 
   const onClick = (e) => {
     const closeBtn = e.target.closest("[data-close='true']");
     if (closeBtn) closeLightbox(lb);
     const prevBtn = e.target.closest("[data-prev='true']");
-    if (prevBtn) scrollToIndex(track, computeActiveIndex(track) - 1, slides.length);
+    if (prevBtn) goToIndex(activeIndex - 1);
     const nextBtn = e.target.closest("[data-next='true']");
-    if (nextBtn) scrollToIndex(track, computeActiveIndex(track) + 1, slides.length);
+    if (nextBtn) goToIndex(activeIndex + 1);
   };
 
-  const onResize = () => {
-    const idx = computeActiveIndex(track);
-    track.scrollLeft = idx * (track.clientWidth || 1);
-  };
-
-  track.addEventListener("scroll", rafUpdate, { passive: true });
+  const onResize = () => mountActiveSlide();
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("resize", onResize, { passive: true });
   lb.addEventListener("click", onClick);
 
   lb._cleanup = () => {
-    track.removeEventListener("scroll", rafUpdate);
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("resize", onResize);
     lb.removeEventListener("click", onClick);
   };
 
-  requestAnimationFrame(() => {
-    track.scrollLeft = startIndex * (track.clientWidth || 1);
-    updateMeta();
-  });
+  requestAnimationFrame(mountActiveSlide);
 }
 
 function closeLightbox(lb) {
