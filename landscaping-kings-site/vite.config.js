@@ -5,9 +5,13 @@ import { fileURLToPath } from "node:url";
 const rootDir = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const cleanRoutes = {
   "/services": "/services.html",
+  "/services/": "/services.html",
   "/gallery": "/gallery.html",
+  "/gallery/": "/gallery.html",
   "/work-with-us": "/work-with-us.html",
-  "/contact": "/contact.html"
+  "/work-with-us/": "/work-with-us.html",
+  "/contact": "/contact.html",
+  "/contact/": "/contact.html"
 };
 
 function cleanRoutePlugin() {

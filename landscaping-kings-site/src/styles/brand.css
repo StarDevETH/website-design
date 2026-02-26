@@ -1,7 +1,7 @@
 @import "./main.css";
 
 /*
-  Bourland-inspired alt theme.
+  D&M Landscaping Kings theme.
   Keep the same HTML + JS hooks, but restyle to match the sharper, squared,
   high-contrast gold/red vibe.
 */
@@ -609,6 +609,33 @@ h3 {
   letter-spacing: 0.02em;
 }
 
+.faqList {
+  display: grid;
+  gap: 12px;
+}
+
+.faqItem {
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  background: #fff;
+  padding: 14px 16px;
+}
+
+.faqItem summary {
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.faqItem summary::marker {
+  color: var(--brand);
+}
+
+.faqItem p {
+  margin: 10px 0 0;
+  color: rgba(0, 0, 0, 0.72);
+}
+
 .filtersBar {
   background: #fff;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
@@ -745,10 +772,15 @@ html[data-mode="dark"] .galleryCard,
 html[data-mode="dark"] .formPlaceholder,
 html[data-mode="dark"] .chip,
 html[data-mode="dark"] .pill,
-html[data-mode="dark"] .filtersBar {
+html[data-mode="dark"] .filtersBar,
+html[data-mode="dark"] .faqItem {
   background: rgba(20, 25, 33, 0.9);
   border-color: rgba(255, 255, 255, 0.14);
   color: rgba(235, 242, 247, 0.9);
+}
+
+html[data-mode="dark"] .faqItem p {
+  color: rgba(235, 242, 247, 0.86);
 }
 
 html[data-mode="dark"] .showcaseNote {
