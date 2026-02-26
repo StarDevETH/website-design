@@ -7,7 +7,7 @@ const LOGO_LIGHT_SRC = `/assets/logo-bush-light.png?v=${LOGO_ASSET_VERSION}`;
 const LOGO_DARK_SRC = `/assets/logo-bush-dark.png?v=${LOGO_ASSET_VERSION}`;
 const REVIEW_STYLES = new Set(["glass", "cards", "compact"]);
 const GOOGLE_REVIEWS_URL =
-  "https://www.google.com/search?q=landscaping+temple+tx&rlz=1C1ONGR_enUS1059US1067&sca_esv=016f34706b28a015&sxsrf=ANbL-n7_1zNR7wPS55ZsN6YFBwolhnOHvA:1771963975389&udm=1&lsack=RwaeaZO1F5a4qtsPrbiokAg&sa=X&sqi=2&ved=2ahUKEwjT9Lqa-PKSAxUWnGoFHS0cCoIQjGp6BAgtEAA&biw=1874&bih=842&dpr=1&lqi=ChVsYW5kc2NhcGluZyB0ZW1wbGUgdHhI0aqiqMqCgIAIWh8QABgAGAEYAiIVbGFuZHNjYXBpbmcgdGVtcGxlIHR4egtCZWxsIENvdW50eZIBEmxhbmRzY2FwZV9kZXNpZ25lcuABAA#lkt=LocalPoiReviews&rlimm=9532872898384148277";
+  "https://www.google.com/maps?cid=9532872898384148277";
 const HERO_REVIEW_SUMMARY = {
   rating: "4.8",
   count: 29
