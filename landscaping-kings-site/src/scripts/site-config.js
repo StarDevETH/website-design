@@ -14,35 +14,18 @@ export const SITE = {
   workWithUsFormEmbedUrl: ""
 };
 
-function safePathname() {
-  if (typeof window === "undefined") return "";
-  return String(window.location?.pathname || "");
-}
-
-export function isAltTheme() {
-  if (typeof document !== "undefined") {
-    const theme = document.documentElement?.dataset?.theme;
-    if (theme === "bourland") return true;
-  }
-
-  // Fallback for static hosting where data-theme might not exist.
-  return safePathname().includes("alt-");
-}
-
 export function route(name) {
-  const alt = isAltTheme();
-
   switch (name) {
     case "home":
-      return alt ? "/alt-index.html" : "/";
+      return "/";
     case "services":
-      return alt ? "/alt-services.html" : "/services.html";
+      return "/services";
     case "gallery":
-      return alt ? "/alt-gallery.html" : "/gallery.html";
+      return "/gallery";
     case "workWithUs":
-      return alt ? "/alt-work-with-us.html" : "/work-with-us.html";
+      return "/work-with-us";
     case "contact":
-      return alt ? "/alt-contact.html" : "/contact.html";
+      return "/contact";
     default:
       return "/";
   }

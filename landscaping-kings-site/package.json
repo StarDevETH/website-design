@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:alt": "vite --open /alt-index.html",
-    "build": "vite build",
+    "build": "vite build && node scripts/postbuild-clean-slugs.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
