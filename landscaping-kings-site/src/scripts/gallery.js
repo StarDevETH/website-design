@@ -37,6 +37,13 @@ function createChip(label, value, active) {
   return btn;
 }
 
+function stripJobMarker(text) {
+  return String(text || "")
+    .replace(/\s*\(job-[^)]+\)/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}
+
 function createTile(item, categoryLabel, idx) {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -133,14 +140,6 @@ function ensureLightbox() {
   root.innerHTML = `
     <div class="lightboxBackdrop" data-close="true"></div>
     <div class="lightboxShell" role="dialog" aria-modal="true" aria-label="Gallery viewer">
-      <button
-        class="iconBtn lightboxCloseFab"
-        type="button"
-        data-close="true"
-        aria-label="Close viewer"
-      >
-        &times;
-      </button>
       <div class="lightboxStage">
         <div class="lightboxMain">
           <div class="lightboxTop">
@@ -157,7 +156,7 @@ function ensureLightbox() {
               <div class="lightboxTitle" data-lb-caption></div>
               <div class="lightboxSub" data-lb-sub></div>
             </div>
-            <a class="iconBtn" href="${contactHref}" title="Get a quote">Get a quote</a>
+            <a class="iconBtn lightboxQuoteBtn" href="${contactHref}" title="Get a quote">Get a quote</a>
           </div>
         </div>
         <aside class="lightboxSide" aria-label="Quick preview panel">
@@ -244,8 +243,8 @@ function openLightbox(lb, slides, startIndex, meta) {
     const nextItem = meta.items[nextIdx];
 
     title.textContent = `${meta.categoryLabel} - ${idx + 1}/${slides.length}`;
-    caption.textContent = item.title || "";
-    sub.textContent = item.alt || "";
+    caption.textContent = stripJobMarker(item.title || "");
+    sub.textContent = stripJobMarker(item.alt || "");
     if (sideCount) sideCount.textContent = `${idx + 1}/${slides.length}`;
 
     if (nextImg && nextItem) {
@@ -316,16 +315,32 @@ function buildSlides(items) {
   return items.map((item) => {
     const slide = document.createElement("div");
     slide.className = "lightboxSlide";
-    const primarySrc = item.src || item.thumb || "";
-    const fallbackSrc = item.thumb || "";
+    const primarySrc = String(item.src || "").trim();
+    const fallbackSrc = String(item.thumb || primarySrc || "").trim();
 
-    slide.innerHTML = `<img src="${primarySrc}" alt="${item.alt || ""}" loading="eager" decoding="async" />`;
-    const img = qs("img", slide);
-    if (img && fallbackSrc && fallbackSrc !== primarySrc) {
-      img.addEventListener("error", () => {
-        img.src = fallbackSrc;
-      });
+    const img = document.createElement("img");
+    img.alt = stripJobMarker(item.alt || "");
+    img.loading = "eager";
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    if (fallbackSrc) img.src = fallbackSrc;
+
+    img.addEventListener("error", () => {
+      if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
+    });
+
+    // Render the known-good thumbnail first, then swap to full image when ready.
+    if (primarySrc && primarySrc !== fallbackSrc) {
+      const hiRes = new Image();
+      hiRes.decoding = "async";
+      hiRes.referrerPolicy = "no-referrer";
+      hiRes.onload = () => {
+        if (img.isConnected) img.src = primarySrc;
+      };
+      hiRes.src = primarySrc;
     }
+
+    slide.appendChild(img);
 
     return slide;
   });

@@ -727,6 +727,34 @@ h3 {
   border-radius: 0;
 }
 
+.lightboxTop {
+  background: linear-gradient(180deg, rgba(4, 8, 12, 0.72), rgba(4, 8, 12, 0));
+}
+
+.lightboxControls {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.lightboxQuoteBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 132px;
+  color: var(--brand);
+  border-color: rgba(87, 195, 67, 0.64);
+  background: rgba(11, 16, 22, 0.8);
+  text-decoration: none;
+}
+
+.lightboxQuoteBtn:hover {
+  color: #7ee86b;
+  border-color: rgba(126, 232, 107, 0.95);
+  background: rgba(11, 16, 22, 0.94);
+}
+
 .lightboxSide,
 .lightboxSidePreview,
 .lightboxThumb {
@@ -892,6 +920,26 @@ html[data-mode="dark"] .siteFooter {
 }
 
 @media (max-width: 640px) {
+  .lightboxTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .lightboxControls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .lightboxBottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .lightboxQuoteBtn {
+    align-self: flex-end;
+  }
+
   .heroActions .btn.btn-quote {
     min-width: 0;
   }
