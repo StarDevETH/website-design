@@ -1192,16 +1192,7 @@ html[data-mode="dark"] .tile:hover {
   pointer-events: auto;
 }
 
-.lightboxSlide {
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  display: grid;
-  place-items: center;
-  padding: 14px 22px;
-}
-
-.lightboxSlide img {
+.lightboxCurrentImage {
   width: auto;
   height: auto;
   max-width: 100%;
@@ -1463,7 +1454,7 @@ html[data-mode="dark"] .tile:hover {
     padding: 10px 16px;
   }
 
-  .lightboxSlide img {
+  .lightboxCurrentImage {
     max-height: 100%;
   }
 }

@@ -258,8 +258,8 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
 
   function mountActiveSlide() {
     const item = getSafeItem(activeIndex);
-    const slide = createSlide(item);
-    track.replaceChildren(slide);
+    const image = createLightboxImage(item);
+    track.replaceChildren(image);
     updateMeta();
   }
 
@@ -305,13 +305,12 @@ function closeLightbox(lb) {
   lb._cleanup = null;
 }
 
-function createSlide(item) {
-  const slide = document.createElement("div");
-  slide.className = "lightboxSlide";
+function createLightboxImage(item) {
   const primarySrc = String(item?.src || "").trim();
   const fallbackSrc = String(item?.thumb || primarySrc || "").trim();
 
   const img = document.createElement("img");
+  img.className = "lightboxCurrentImage";
   img.alt = stripJobMarker(item?.alt || "");
   img.loading = "eager";
   img.decoding = "async";
@@ -331,8 +330,7 @@ function createSlide(item) {
     hiRes.src = primarySrc;
   }
 
-  slide.appendChild(img);
-  return slide;
+  return img;
 }
 
 async function runGallery() {
