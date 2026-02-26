@@ -7,9 +7,9 @@
 */
 
 :root {
-  --topbar-h: 0px;
+  --topbar-h: 42px;
   --siteheader-h: 86px;
-  --header-stack-h: 86px;
+  --header-stack-h: 128px;
   --bg0: #ffffff;
   --bg1: #f7f7f7;
   --surface: rgba(255, 255, 255, 0.92);
@@ -37,6 +37,7 @@ body {
     sans-serif;
   line-height: 1.6;
   background: #fff;
+  padding-top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
 }
 
 body::before {
@@ -112,6 +113,12 @@ h3 {
 }
 
 .topBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 260;
   background: #2d2d2d;
   color: rgba(255, 255, 255, 0.78);
 }
@@ -157,6 +164,12 @@ h3 {
 }
 
 .siteHeader {
+  position: fixed;
+  top: var(--topbar-h, 0px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 250;
   background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(10px);
@@ -640,6 +653,9 @@ h3 {
 }
 
 .filtersBar {
+  position: sticky;
+  top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
+  z-index: 240;
   background: #fff;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -810,30 +826,7 @@ html[data-mode="dark"] .siteFooter {
 }
 
 @media (max-width: 900px) {
-  body {
-    padding-top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
-  }
-
-  .topBar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 260;
-  }
-
-  .siteHeader {
-    position: fixed;
-    top: var(--topbar-h, 0px);
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 250;
-  }
-
   .filtersBar {
-    top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
     padding: 8px 0;
   }
 

@@ -7,7 +7,7 @@ const LOGO_LIGHT_SRC = `/assets/logo-bush-light.png?v=${LOGO_ASSET_VERSION}`;
 const LOGO_DARK_SRC = `/assets/logo-bush-dark.png?v=${LOGO_ASSET_VERSION}`;
 const REVIEW_STYLES = new Set(["glass", "cards", "compact"]);
 const GOOGLE_REVIEWS_URL =
-  "https://www.google.com/maps?cid=9532872898384148277";
+  "https://share.google/FlHwn4OswIDit1eaL";
 const HERO_REVIEW_SUMMARY = {
   rating: "4.8",
   count: 29
@@ -211,11 +211,9 @@ function initStickyOffsets() {
   if (!header) return;
 
   const apply = () => {
-    const isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
-    const topBarHeight =
-      isMobile && topBar ? Math.ceil(topBar.getBoundingClientRect().height) : 0;
+    const topBarHeight = topBar ? Math.ceil(topBar.getBoundingClientRect().height) : 0;
     const headerHeight = Math.ceil(header.getBoundingClientRect().height);
-    const headerStackHeight = isMobile ? topBarHeight + headerHeight : headerHeight;
+    const headerStackHeight = topBarHeight + headerHeight;
 
     document.documentElement.style.setProperty("--topbar-h", `${topBarHeight}px`);
     document.documentElement.style.setProperty("--siteheader-h", `${headerHeight}px`);
