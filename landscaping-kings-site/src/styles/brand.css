@@ -8,6 +8,8 @@
 
 :root {
   --topbar-h: 0px;
+  --siteheader-h: 86px;
+  --header-stack-h: 86px;
   --bg0: #ffffff;
   --bg1: #f7f7f7;
   --surface: rgba(255, 255, 255, 0.92);
@@ -808,28 +810,39 @@ html[data-mode="dark"] .siteFooter {
 }
 
 @media (max-width: 900px) {
+  body {
+    padding-top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
+  }
+
   .topBar {
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 260;
   }
 
   .siteHeader {
+    position: fixed;
     top: var(--topbar-h, 0px);
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 250;
   }
 
   .filtersBar {
-    top: calc(var(--header-h) + var(--topbar-h, 0px));
+    top: var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px)));
     padding: 8px 0;
   }
 
   #gallery-filters {
-    scroll-margin-top: calc(var(--header-h) + var(--topbar-h, 0px) + 10px);
+    scroll-margin-top: calc(var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px))) + 10px);
   }
 
   #gallery-grid {
-    scroll-margin-top: calc(var(--header-h) + var(--topbar-h, 0px) + 90px);
+    scroll-margin-top: calc(var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px))) + 90px);
   }
 
   .filtersRow {
@@ -857,6 +870,11 @@ html[data-mode="dark"] .siteFooter {
 
   html[data-mode="dark"] .filtersRow::-webkit-scrollbar-thumb {
     background: rgba(235, 242, 247, 0.28);
+  }
+
+  .siteNav {
+    inset: calc(var(--header-stack-h, calc(var(--header-h) + var(--topbar-h, 0px))) + 8px)
+      12px auto 12px;
   }
 
   .topBarInner {

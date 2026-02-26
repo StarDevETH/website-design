@@ -207,12 +207,19 @@ function initCurrentNav() {
 
 function initStickyOffsets() {
   const topBar = qs(".topBar");
-  if (!topBar) return;
+  const header = qs(".siteHeader");
+  if (!header) return;
 
   const apply = () => {
     const isMobile = window.matchMedia && window.matchMedia("(max-width: 900px)").matches;
-    const topBarHeight = isMobile ? Math.ceil(topBar.getBoundingClientRect().height) : 0;
+    const topBarHeight =
+      isMobile && topBar ? Math.ceil(topBar.getBoundingClientRect().height) : 0;
+    const headerHeight = Math.ceil(header.getBoundingClientRect().height);
+    const headerStackHeight = isMobile ? topBarHeight + headerHeight : headerHeight;
+
     document.documentElement.style.setProperty("--topbar-h", `${topBarHeight}px`);
+    document.documentElement.style.setProperty("--siteheader-h", `${headerHeight}px`);
+    document.documentElement.style.setProperty("--header-stack-h", `${headerStackHeight}px`);
   };
 
   apply();
