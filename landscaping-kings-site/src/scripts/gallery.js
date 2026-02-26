@@ -49,6 +49,7 @@ function createTile(item, categoryLabel, idx) {
   btn.type = "button";
   btn.className = "tile";
   btn.dataset.index = String(idx);
+  btn.dataset.itemId = String(item.id || "");
 
   btn.innerHTML = `
     <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
@@ -108,6 +109,7 @@ function createShowcaseTile(item, categoryLabel, idx) {
   btn.type = "button";
   btn.className = "showcaseTile";
   btn.dataset.index = String(idx);
+  btn.dataset.itemId = String(item.id || "");
   btn.setAttribute("aria-label", `Open ${categoryLabel} image`);
 
   btn.innerHTML = `
@@ -191,19 +193,7 @@ function clampInt(n, min, max) {
   return Math.max(min, Math.min(max, x));
 }
 
-function computeActiveIndex(track) {
-  const w = track.clientWidth || 1;
-  return Math.round(track.scrollLeft / w);
-}
-
-function scrollToIndex(track, idx, count) {
-  const safeCount = Math.max(0, Number(count) || 0);
-  const target = clampInt(idx, 0, Math.max(0, safeCount - 1));
-  const w = track.clientWidth || 1;
-  track.scrollTo({ left: target * w, behavior: "smooth" });
-}
-
-function openLightbox(lb, slides, startIndex, meta) {
+function openLightbox(lb, items, startIndex, categoryLabel) {
   const track = qs("[data-lb-track]", lb);
   const title = qs("[data-lb-title]", lb);
   const caption = qs("[data-lb-caption]", lb);
@@ -211,16 +201,16 @@ function openLightbox(lb, slides, startIndex, meta) {
   const sideCount = qs("[data-lb-side-count]", lb);
   const nextImg = qs("[data-lb-next-img]", lb);
   const thumbRail = qs("[data-lb-thumbs]", lb);
-  const total = Math.max(0, slides.length);
+  const total = Math.max(0, items.length);
   if (!track || !total) return;
 
   let activeIndex = clampInt(startIndex, 0, Math.max(0, total - 1));
-  const getSafeItem = (idx) => meta.items[clampInt(idx, 0, Math.max(0, meta.items.length - 1))] || {};
+  const getSafeItem = (idx) => items[clampInt(idx, 0, Math.max(0, items.length - 1))] || {};
 
   const thumbs = [];
   if (thumbRail) {
     thumbRail.replaceChildren();
-    meta.items.forEach((item, idx) => {
+    items.forEach((item, idx) => {
       const thumbBtn = document.createElement("button");
       thumbBtn.type = "button";
       thumbBtn.className = "lightboxThumb";
@@ -246,7 +236,7 @@ function openLightbox(lb, slides, startIndex, meta) {
     const nextIdx = (idx + 1) % total;
     const nextItem = getSafeItem(nextIdx);
 
-    title.textContent = `${meta.categoryLabel} - ${idx + 1}/${total}`;
+    title.textContent = `${categoryLabel} - ${idx + 1}/${total}`;
     caption.textContent = stripJobMarker(item.title || "");
     sub.textContent = stripJobMarker(item.alt || "");
     if (sideCount) sideCount.textContent = `${idx + 1}/${total}`;
@@ -267,8 +257,8 @@ function openLightbox(lb, slides, startIndex, meta) {
   };
 
   function mountActiveSlide() {
-    const slide = slides[activeIndex];
-    if (!slide) return;
+    const item = getSafeItem(activeIndex);
+    const slide = createSlide(item);
     track.replaceChildren(slide);
     updateMeta();
   }
@@ -315,37 +305,34 @@ function closeLightbox(lb) {
   lb._cleanup = null;
 }
 
-function buildSlides(items) {
-  return items.map((item) => {
-    const slide = document.createElement("div");
-    slide.className = "lightboxSlide";
-    const primarySrc = String(item.src || "").trim();
-    const fallbackSrc = String(item.thumb || primarySrc || "").trim();
+function createSlide(item) {
+  const slide = document.createElement("div");
+  slide.className = "lightboxSlide";
+  const primarySrc = String(item?.src || "").trim();
+  const fallbackSrc = String(item?.thumb || primarySrc || "").trim();
 
-    const img = document.createElement("img");
-    img.alt = stripJobMarker(item.alt || "");
-    img.loading = "eager";
-    img.decoding = "async";
-    if (fallbackSrc) img.src = fallbackSrc;
+  const img = document.createElement("img");
+  img.alt = stripJobMarker(item?.alt || "");
+  img.loading = "eager";
+  img.decoding = "async";
+  if (fallbackSrc) img.src = fallbackSrc;
 
-    img.addEventListener("error", () => {
-      if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
-    });
-
-    // Render the known-good thumbnail first, then swap to full image when ready.
-    if (primarySrc && primarySrc !== fallbackSrc) {
-      const hiRes = new Image();
-      hiRes.decoding = "async";
-      hiRes.onload = () => {
-        if (img.isConnected) img.src = primarySrc;
-      };
-      hiRes.src = primarySrc;
-    }
-
-    slide.appendChild(img);
-
-    return slide;
+  img.addEventListener("error", () => {
+    if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
   });
+
+  // Render the known-good thumbnail first, then swap to full image when ready.
+  if (primarySrc && primarySrc !== fallbackSrc) {
+    const hiRes = new Image();
+    hiRes.decoding = "async";
+    hiRes.onload = () => {
+      if (img.isConnected) img.src = primarySrc;
+    };
+    hiRes.src = primarySrc;
+  }
+
+  slide.appendChild(img);
+  return slide;
 }
 
 async function runGallery() {
@@ -369,9 +356,7 @@ async function runGallery() {
   if (activeTag && !tags.includes(activeTag)) activeTag = "";
 
   const lb = ensureLightbox();
-  const allSlides = buildSlides(allItems);
   let visibleItems = [];
-  let slides = [];
 
   if (showcase) {
     const featured = pickShowcaseItems(allItems, categories, 12);
@@ -387,8 +372,11 @@ async function runGallery() {
     showcase.addEventListener("click", (e) => {
       const btn = e.target.closest(".showcaseTile");
       if (!btn) return;
-      const idx = Number(btn.dataset.index || "0");
-      openLightbox(lb, allSlides, idx, { items: allItems, categoryLabel: "All work" });
+      const itemId = btn.dataset.itemId || "";
+      const byId = allItems.findIndex((x) => String(x.id || "") === itemId);
+      const fallback = Number(btn.dataset.index || "0");
+      const idx = byId >= 0 ? byId : fallback;
+      openLightbox(lb, allItems, idx, "All work");
     });
   }
 
@@ -414,8 +402,6 @@ async function runGallery() {
       return;
     }
 
-    slides = buildSlides(visibleItems);
-
     visibleItems.forEach((item, idx) => {
       const label = categories[item.tag] || `Category ${item.tag}`;
       grid.appendChild(createTile(item, label, idx));
@@ -425,9 +411,12 @@ async function runGallery() {
   grid.addEventListener("click", (e) => {
     const btn = e.target.closest(".tile");
     if (!btn) return;
-    const idx = Number(btn.dataset.index || "0");
+    const itemId = btn.dataset.itemId || "";
+    const byId = visibleItems.findIndex((x) => String(x.id || "") === itemId);
+    const fallback = Number(btn.dataset.index || "0");
+    const idx = byId >= 0 ? byId : fallback;
     const categoryLabel = activeTag ? categories[activeTag] || `Category ${activeTag}` : "All work";
-    openLightbox(lb, slides, idx, { items: visibleItems, categoryLabel });
+    openLightbox(lb, visibleItems, idx, categoryLabel);
   });
 
   filters.addEventListener("click", (e) => {
