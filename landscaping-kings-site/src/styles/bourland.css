@@ -269,10 +269,9 @@ h3 {
     0 0 0 1px rgba(87, 195, 67, 0.45);
 }
 
-.hero.heroAlt .btn-quote {
+.btn.btn-quote {
   position: relative;
   isolation: isolate;
-  min-width: 206px;
   background: linear-gradient(135deg, rgba(36, 38, 50, 0.96), rgba(12, 16, 24, 0.95));
   border-color: rgba(110, 221, 88, 0.82);
   color: rgba(245, 251, 247, 0.98);
@@ -282,7 +281,7 @@ h3 {
     inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.hero.heroAlt .btn-quote::before {
+.btn.btn-quote::before {
   content: "";
   width: 8px;
   height: 8px;
@@ -291,7 +290,7 @@ h3 {
   box-shadow: 0 0 0 4px rgba(87, 195, 67, 0.25);
 }
 
-.hero.heroAlt .btn-quote::after {
+.btn.btn-quote::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -300,7 +299,7 @@ h3 {
   opacity: 0.75;
 }
 
-.hero.heroAlt .btn-quote:hover {
+.btn.btn-quote:hover {
   background: linear-gradient(135deg, rgba(50, 57, 71, 0.98), rgba(16, 21, 30, 0.98));
   border-color: rgba(126, 232, 107, 1);
   color: #fff;
@@ -309,9 +308,17 @@ h3 {
     0 0 0 1px rgba(110, 221, 88, 0.56);
 }
 
-.hero.heroAlt .btn-quote:focus-visible {
+.btn.btn-quote:focus-visible {
   outline: 2px solid rgba(126, 232, 107, 0.95);
   outline-offset: 2px;
+}
+
+.heroActions .btn.btn-quote {
+  min-width: 206px;
+}
+
+.siteNav .btn.btn-quote {
+  min-width: 0;
 }
 
 .heroReviews {
@@ -573,6 +580,7 @@ h3 {
 .serviceCard,
 .ctaBand,
 .tile,
+.showcaseTile,
 .galleryCard,
 .formPlaceholder {
   border-radius: 0;
@@ -618,6 +626,27 @@ h3 {
   border-color: rgba(87, 195, 67, 0.4);
 }
 
+.showcaseBadge,
+.tileBrandBadge {
+  border-radius: 0;
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.showcaseLabel {
+  border-radius: 0;
+  background: rgba(0, 0, 0, 0.76);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: rgba(255, 255, 255, 0.94);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 11px;
+}
+
+.showcaseNote {
+  color: rgba(0, 0, 0, 0.62);
+}
+
 .siteFooter {
   background: #2d2d2d;
   color: rgba(255, 255, 255, 0.78);
@@ -649,6 +678,12 @@ h3 {
 }
 
 .iconBtn {
+  border-radius: 0;
+}
+
+.lightboxSide,
+.lightboxSidePreview,
+.lightboxThumb {
   border-radius: 0;
 }
 
@@ -705,6 +740,7 @@ html[data-mode="dark"] .featureCard,
 html[data-mode="dark"] .serviceCard,
 html[data-mode="dark"] .ctaBand,
 html[data-mode="dark"] .tile,
+html[data-mode="dark"] .showcaseTile,
 html[data-mode="dark"] .galleryCard,
 html[data-mode="dark"] .formPlaceholder,
 html[data-mode="dark"] .chip,
@@ -713,6 +749,10 @@ html[data-mode="dark"] .filtersBar {
   background: rgba(20, 25, 33, 0.9);
   border-color: rgba(255, 255, 255, 0.14);
   color: rgba(235, 242, 247, 0.9);
+}
+
+html[data-mode="dark"] .showcaseNote {
+  color: rgba(235, 242, 247, 0.76);
 }
 
 html[data-mode="dark"] .siteFooter {
@@ -749,7 +789,7 @@ html[data-mode="dark"] .siteFooter {
 }
 
 @media (max-width: 640px) {
-  .hero.heroAlt .btn-quote {
+  .heroActions .btn.btn-quote {
     min-width: 0;
   }
 

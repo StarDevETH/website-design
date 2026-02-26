@@ -397,7 +397,8 @@ html[data-mode="dark"] .serviceIncluded li,
 html[data-mode="dark"] .footerMeta,
 html[data-mode="dark"] .badgeTitle,
 html[data-mode="dark"] .badgeBody,
-html[data-mode="dark"] .formPlaceholder {
+html[data-mode="dark"] .formPlaceholder,
+html[data-mode="dark"] .showcaseNote {
   color: rgba(232, 241, 234, 0.78);
 }
 
@@ -413,9 +414,21 @@ html[data-mode="dark"] .filtersBar,
 html[data-mode="dark"] .formShell,
 html[data-mode="dark"] .galleryCard,
 html[data-mode="dark"] .tile,
-html[data-mode="dark"] .mediaCard {
+html[data-mode="dark"] .mediaCard,
+html[data-mode="dark"] .showcaseTile {
   background: rgba(16, 22, 20, 0.8);
   border-color: rgba(255, 255, 255, 0.14);
+}
+
+html[data-mode="dark"] .showcaseLabel {
+  background: rgba(8, 12, 10, 0.86);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+html[data-mode="dark"] .showcaseBadge,
+html[data-mode="dark"] .tileBrandBadge {
+  background: rgba(8, 12, 10, 0.84);
+  border-color: rgba(255, 255, 255, 0.42);
 }
 
 html[data-mode="dark"] .siteFooter {
@@ -865,6 +878,106 @@ html[data-mode="dark"] .tile:hover {
   max-width: 70ch;
 }
 
+.lightroomSection {
+  padding-top: 0;
+}
+
+.showcaseGrid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.showcaseTile {
+  position: relative;
+  grid-column: span 3;
+  border: 1px solid rgba(13, 21, 18, 0.14);
+  border-radius: 18px;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  background: #0d1512;
+  cursor: pointer;
+  appearance: none;
+  text-align: left;
+  min-height: 180px;
+  box-shadow: 0 16px 42px rgba(13, 21, 18, 0.14);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.showcaseTile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 58px rgba(13, 21, 18, 0.2);
+}
+
+.showcaseTile img {
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  object-fit: cover;
+}
+
+.showcaseTile:nth-child(8n + 1),
+.showcaseTile:nth-child(8n + 6) {
+  grid-column: span 6;
+}
+
+.showcaseTile:nth-child(8n + 3),
+.showcaseTile:nth-child(8n + 8) {
+  min-height: 220px;
+}
+
+.showcaseBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  background: rgba(10, 14, 12, 0.74);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.34);
+}
+
+.showcaseBadge img {
+  width: 24px;
+  height: 24px;
+  min-height: 0;
+  object-fit: contain;
+}
+
+.showcaseLabel {
+  position: absolute;
+  left: 10px;
+  right: auto;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: calc(100% - 20px);
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(10, 14, 12, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: rgba(245, 251, 247, 0.96);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.showcaseNote {
+  margin: 0;
+  color: rgba(13, 21, 18, 0.68);
+  font-size: 14px;
+  padding-top: 10px;
+}
+
 .filtersBar {
   position: sticky;
   top: var(--header-h);
@@ -873,6 +986,14 @@ html[data-mode="dark"] .tile:hover {
   background: rgba(246, 244, 239, 0.72);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(13, 21, 18, 0.08);
+}
+
+#gallery-filters {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+#gallery-grid {
+  scroll-margin-top: calc(var(--header-h) + 120px);
 }
 
 .filtersRow {
@@ -936,6 +1057,26 @@ html[data-mode="dark"] .tile:hover {
   object-fit: cover;
 }
 
+.tileBrandBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  background: rgba(10, 14, 12, 0.72);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.28);
+}
+
+.tileBrandBadge img {
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+}
+
 .tileMeta {
   position: absolute;
   left: 12px;
@@ -970,6 +1111,31 @@ html[data-mode="dark"] .tile:hover {
   box-shadow: 0 40px 120px rgba(0, 0, 0, 0.42);
 }
 
+.lightboxCloseFab {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 4;
+  min-width: 42px;
+  padding: 8px 12px;
+  font-size: 28px;
+  line-height: 1;
+}
+
+.lightboxStage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: minmax(0, 1fr) clamp(240px, 24vw, 340px);
+}
+
+.lightboxMain {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+}
+
 .lightboxTop {
   position: absolute;
   left: 0;
@@ -982,6 +1148,12 @@ html[data-mode="dark"] .tile:hover {
   padding: 12px 12px;
   z-index: 2;
   color: rgba(255, 255, 255, 0.92);
+}
+
+.lightboxControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
 .iconBtn {
@@ -1009,6 +1181,7 @@ html[data-mode="dark"] .tile:hover {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  pointer-events: auto;
 }
 
 .lightboxSlide {
@@ -1026,6 +1199,90 @@ html[data-mode="dark"] .tile:hover {
   object-fit: contain;
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.06);
+}
+
+.lightboxSide {
+  position: relative;
+  z-index: 2;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  background:
+    linear-gradient(180deg, rgba(13, 21, 18, 0.82), rgba(13, 21, 18, 0.7)),
+    radial-gradient(700px 300px at -40% 50%, rgba(87, 195, 67, 0.26), transparent 70%);
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 10px;
+}
+
+.lightboxSideTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lightboxSideTitle {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 800;
+}
+
+.lightboxSideCount {
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.lightboxSidePreview {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  width: 100%;
+  min-height: 180px;
+  padding: 0;
+}
+
+.lightboxSidePreview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lightboxThumbRail {
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  padding-right: 2px;
+}
+
+.lightboxThumb {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+}
+
+.lightboxThumb img {
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  display: block;
+}
+
+.lightboxThumb.isActive {
+  border-color: rgba(110, 221, 88, 0.9);
+  box-shadow: 0 0 0 1px rgba(87, 195, 67, 0.44);
 }
 
 .lightboxBottom {
@@ -1103,6 +1360,20 @@ html[data-mode="dark"] .tile:hover {
     opacity: 0.55;
   }
 
+  .showcaseGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .showcaseTile,
+  .showcaseTile:nth-child(8n + 1),
+  .showcaseTile:nth-child(8n + 3),
+  .showcaseTile:nth-child(8n + 6),
+  .showcaseTile:nth-child(8n + 8) {
+    grid-column: span 1;
+    min-height: 170px;
+  }
+
   .navToggle {
     display: inline-flex;
   }
@@ -1171,6 +1442,18 @@ html[data-mode="dark"] .tile:hover {
   .lightboxShell {
     inset: 12px;
   }
+
+  .lightboxStage {
+    grid-template-columns: 1fr;
+  }
+
+  .lightboxSide {
+    display: none;
+  }
+
+  .lightboxSlide {
+    padding: 56px 16px 70px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1192,6 +1475,19 @@ html[data-mode="dark"] .tile:hover {
 
   .mediaCard--c {
     display: none;
+  }
+
+  .showcaseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .showcaseTile,
+  .showcaseTile:nth-child(8n + 1),
+  .showcaseTile:nth-child(8n + 3),
+  .showcaseTile:nth-child(8n + 6),
+  .showcaseTile:nth-child(8n + 8) {
+    grid-column: span 1;
+    min-height: 190px;
   }
 
   .formShell iframe {

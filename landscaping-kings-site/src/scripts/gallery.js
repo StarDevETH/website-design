@@ -1,4 +1,5 @@
 import { SITE, route } from "./site-config.js";
+const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260226-1";
 
 function qs(sel, root = document) {
   return root.querySelector(sel);
@@ -9,7 +10,7 @@ function qsa(sel, root = document) {
 }
 
 async function loadJson(path) {
-  const res = await fetch(path, { headers: { "Accept": "application/json" } });
+  const res = await fetch(path, { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
   return res.json();
 }
@@ -44,10 +45,70 @@ function createTile(item, categoryLabel, idx) {
 
   btn.innerHTML = `
     <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
+    <span class="tileBrandBadge" aria-hidden="true">
+      <img src="${TILE_BADGE_SRC}" alt="" loading="lazy" decoding="async" />
+    </span>
     <div class="tileMeta pill">
       <span class="dot" aria-hidden="true"></span>
-      <span>${item.tag} — ${categoryLabel}</span>
+      <span>${categoryLabel}</span>
     </div>
+  `;
+
+  return btn;
+}
+
+function pickShowcaseItems(items, categories, limit = 12) {
+  if (!Array.isArray(items) || !items.length) return [];
+
+  const order = Object.keys(categories || {});
+  const orderedTags = order.length
+    ? order
+    : Array.from(new Set(items.map((item) => item.tag).filter(Boolean)));
+  const buckets = new Map(orderedTags.map((tag) => [tag, []]));
+  const fallback = [];
+
+  for (const item of items) {
+    const tag = String(item.tag || "").toUpperCase();
+    if (buckets.has(tag)) buckets.get(tag).push(item);
+    else fallback.push(item);
+  }
+
+  const picked = [];
+  while (picked.length < limit) {
+    let added = false;
+    for (const tag of orderedTags) {
+      const bucket = buckets.get(tag);
+      if (!bucket || !bucket.length) continue;
+      picked.push(bucket.shift());
+      added = true;
+      if (picked.length >= limit) break;
+    }
+    if (!added) break;
+  }
+
+  if (picked.length < limit) {
+    for (const item of fallback) {
+      picked.push(item);
+      if (picked.length >= limit) break;
+    }
+  }
+
+  return picked;
+}
+
+function createShowcaseTile(item, categoryLabel, idx) {
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "showcaseTile";
+  btn.dataset.index = String(idx);
+  btn.setAttribute("aria-label", `Open ${categoryLabel} image`);
+
+  btn.innerHTML = `
+    <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
+    <span class="showcaseBadge" aria-hidden="true">
+      <img src="${TILE_BADGE_SRC}" alt="" loading="lazy" decoding="async" />
+    </span>
+    <span class="showcaseLabel">${categoryLabel}</span>
   `;
 
   return btn;
@@ -55,7 +116,13 @@ function createTile(item, categoryLabel, idx) {
 
 function ensureLightbox() {
   let root = qs("[data-lightbox]");
-  if (root) return root;
+  if (root) {
+    const hasTrack = !!qs("[data-lb-track]", root);
+    const hasTitle = !!qs("[data-lb-title]", root);
+    const hasClose = !!qs("[data-close='true']", root);
+    if (hasTrack && hasTitle && hasClose) return root;
+    root.remove();
+  }
 
   root = document.createElement("div");
   root.className = "lightbox";
@@ -66,21 +133,48 @@ function ensureLightbox() {
   root.innerHTML = `
     <div class="lightboxBackdrop" data-close="true"></div>
     <div class="lightboxShell" role="dialog" aria-modal="true" aria-label="Gallery viewer">
-      <div class="lightboxTop">
-        <div class="lightboxTitle" data-lb-title></div>
-        <div style="display:flex;gap:10px;align-items:center">
-          <button class="iconBtn" type="button" data-prev="true" aria-label="Previous image">Prev</button>
-          <button class="iconBtn" type="button" data-next="true" aria-label="Next image">Next</button>
-          <button class="iconBtn" type="button" data-close="true" aria-label="Close viewer">Close</button>
+      <button
+        class="iconBtn lightboxCloseFab"
+        type="button"
+        data-close="true"
+        aria-label="Close viewer"
+      >
+        &times;
+      </button>
+      <div class="lightboxStage">
+        <div class="lightboxMain">
+          <div class="lightboxTop">
+            <div class="lightboxTitle" data-lb-title></div>
+            <div class="lightboxControls">
+              <button class="iconBtn" type="button" data-prev="true" aria-label="Previous image">Prev</button>
+              <button class="iconBtn" type="button" data-next="true" aria-label="Next image">Next</button>
+              <button class="iconBtn" type="button" data-close="true" aria-label="Close viewer">Close</button>
+            </div>
+          </div>
+          <div class="lightboxTrack" data-lb-track></div>
+          <div class="lightboxBottom">
+            <div>
+              <div class="lightboxTitle" data-lb-caption></div>
+              <div class="lightboxSub" data-lb-sub></div>
+            </div>
+            <a class="iconBtn" href="${contactHref}" title="Get a quote">Get a quote</a>
+          </div>
         </div>
-      </div>
-      <div class="lightboxTrack" data-lb-track></div>
-      <div class="lightboxBottom">
-        <div>
-          <div class="lightboxTitle" data-lb-caption></div>
-          <div class="lightboxSub" data-lb-sub></div>
-        </div>
-        <a class="iconBtn" href="${contactHref}" title="Get a quote">Get a quote</a>
+        <aside class="lightboxSide" aria-label="Quick preview panel">
+          <div class="lightboxSideTop">
+            <div class="lightboxSideTitle">Up next</div>
+            <div class="lightboxSideCount" data-lb-side-count></div>
+          </div>
+          <button
+            class="lightboxSidePreview"
+            type="button"
+            data-next="true"
+            aria-label="Preview next image"
+          >
+            <img data-lb-next-img src="" alt="" loading="lazy" decoding="async" />
+          </button>
+          <div class="lightboxThumbRail" data-lb-thumbs></div>
+        </aside>
       </div>
     </div>
   `;
@@ -115,6 +209,27 @@ function openLightbox(lb, slides, startIndex, meta) {
   const title = qs("[data-lb-title]", lb);
   const caption = qs("[data-lb-caption]", lb);
   const sub = qs("[data-lb-sub]", lb);
+  const sideCount = qs("[data-lb-side-count]", lb);
+  const nextImg = qs("[data-lb-next-img]", lb);
+  const thumbRail = qs("[data-lb-thumbs]", lb);
+
+  const thumbs = [];
+  if (thumbRail) {
+    thumbRail.replaceChildren();
+    meta.items.forEach((item, idx) => {
+      const thumbBtn = document.createElement("button");
+      thumbBtn.type = "button";
+      thumbBtn.className = "lightboxThumb";
+      thumbBtn.dataset.index = String(idx);
+      thumbBtn.setAttribute("aria-label", `Open image ${idx + 1}`);
+      thumbBtn.innerHTML = `
+        <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
+      `;
+      thumbBtn.addEventListener("click", () => scrollToIndex(track, idx, slides.length));
+      thumbRail.appendChild(thumbBtn);
+      thumbs.push(thumbBtn);
+    });
+  }
 
   track.replaceChildren();
   for (const slide of slides) track.appendChild(slide);
@@ -125,9 +240,27 @@ function openLightbox(lb, slides, startIndex, meta) {
   const updateMeta = () => {
     const idx = Math.max(0, Math.min(slides.length - 1, computeActiveIndex(track)));
     const item = meta.items[idx];
-    title.textContent = `${meta.categoryLabel} • ${idx + 1}/${slides.length}`;
+    const nextIdx = (idx + 1) % slides.length;
+    const nextItem = meta.items[nextIdx];
+
+    title.textContent = `${meta.categoryLabel} - ${idx + 1}/${slides.length}`;
     caption.textContent = item.title || "";
     sub.textContent = item.alt || "";
+    if (sideCount) sideCount.textContent = `${idx + 1}/${slides.length}`;
+
+    if (nextImg && nextItem) {
+      nextImg.src = nextItem.thumb || nextItem.src;
+      nextImg.alt = nextItem.alt || "Next image preview";
+    }
+
+    thumbs.forEach((el, i) => {
+      const isActive = i === idx;
+      el.classList.toggle("isActive", isActive);
+      el.setAttribute("aria-current", isActive ? "true" : "false");
+    });
+
+    const activeThumb = thumbs[idx];
+    if (activeThumb) activeThumb.scrollIntoView({ block: "nearest", inline: "nearest" });
   };
 
   const rafUpdate = () => requestAnimationFrame(updateMeta);
@@ -183,7 +316,17 @@ function buildSlides(items) {
   return items.map((item) => {
     const slide = document.createElement("div");
     slide.className = "lightboxSlide";
-    slide.innerHTML = `<img src="${item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />`;
+    const primarySrc = item.src || item.thumb || "";
+    const fallbackSrc = item.thumb || "";
+
+    slide.innerHTML = `<img src="${primarySrc}" alt="${item.alt || ""}" loading="eager" decoding="async" />`;
+    const img = qs("img", slide);
+    if (img && fallbackSrc && fallbackSrc !== primarySrc) {
+      img.addEventListener("error", () => {
+        img.src = fallbackSrc;
+      });
+    }
+
     return slide;
   });
 }
@@ -191,11 +334,12 @@ function buildSlides(items) {
 async function runGallery() {
   const filters = qs("[data-gallery-filters]");
   const grid = qs("[data-gallery-grid]");
+  const showcase = qs("[data-gallery-showcase]");
   if (!filters || !grid) return;
 
   const [categories, galleryJson] = await Promise.all([
     loadJson("/data/categories.json"),
-    loadJson("/data/gallery.json")
+    loadJson("/data/gallery.json"),
   ]);
 
   const allItems = galleryJson.items || [];
@@ -208,14 +352,34 @@ async function runGallery() {
   if (activeTag && !tags.includes(activeTag)) activeTag = "";
 
   const lb = ensureLightbox();
+  const allSlides = buildSlides(allItems);
   let visibleItems = [];
   let slides = [];
+
+  if (showcase) {
+    const featured = pickShowcaseItems(allItems, categories, 12);
+    showcase.replaceChildren();
+
+    featured.forEach((item) => {
+      const label = categories[item.tag] || `Category ${item.tag}`;
+      const globalIndex = allItems.findIndex((x) => x.id === item.id);
+      if (globalIndex < 0) return;
+      showcase.appendChild(createShowcaseTile(item, label, globalIndex));
+    });
+
+    showcase.addEventListener("click", (e) => {
+      const btn = e.target.closest(".showcaseTile");
+      if (!btn) return;
+      const idx = Number(btn.dataset.index || "0");
+      openLightbox(lb, allSlides, idx, { items: allItems, categoryLabel: "All work" });
+    });
+  }
 
   const render = () => {
     filters.replaceChildren();
     filters.appendChild(createChip("All", "", !activeTag));
     for (const tag of tags) {
-      const label = `${tag} — ${categories[tag] || `Category ${tag}`}`;
+      const label = categories[tag] || `Category ${tag}`;
       filters.appendChild(createChip(label, tag, tag === activeTag));
     }
 
@@ -245,9 +409,7 @@ async function runGallery() {
     const btn = e.target.closest(".tile");
     if (!btn) return;
     const idx = Number(btn.dataset.index || "0");
-    const categoryLabel = activeTag
-      ? categories[activeTag] || `Category ${activeTag}`
-      : "All work";
+    const categoryLabel = activeTag ? categories[activeTag] || `Category ${activeTag}` : "All work";
     openLightbox(lb, slides, idx, { items: visibleItems, categoryLabel });
   });
 

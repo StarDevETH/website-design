@@ -376,7 +376,6 @@ function renderServiceCard(service, categoryLabel) {
 
   li.innerHTML = `
     <div class="serviceHead">
-      <div class="serviceTag" aria-hidden="true">${service.tag}</div>
       <div class="pill" title="${categoryLabel}">
         <span class="dot" aria-hidden="true"></span>
         <span>${categoryLabel}</span>
@@ -417,7 +416,7 @@ function renderGalleryPreviewCard(item, categoryLabel) {
     <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
     <div class="mediaLabel pill">
       <span class="dot" aria-hidden="true"></span>
-      <span>${item.tag} — ${categoryLabel}</span>
+      <span>${categoryLabel}</span>
     </div>
   `;
   return a;
@@ -488,3 +487,4 @@ async function run() {
 }
 
 run();
+

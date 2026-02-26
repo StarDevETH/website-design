@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en" data-theme="bourland">
   <head>
     <meta charset="UTF-8" />
@@ -53,9 +53,6 @@
             <span data-service-area>Temple, Belton, Salado, and Killeen</span>
           </span>
         </div>
-        <div class="topBarGroup" aria-label="Theme switch">
-          <a class="topBarLink" href="/" title="View the premium theme">View Premium Theme</a>
-        </div>
       </div>
     </div>
 
@@ -97,17 +94,34 @@
           <p class="kicker">Gallery - Swipeable viewer</p>
           <h1>Browse by category. Open photos in a scroll-snap carousel.</h1>
           <p class="lede">
-            Each photo is tagged with a letter (A-J). Filter by category, then click any photo to
-            open the full viewer.
+            Each photo is organized by service category. Filter by category, then click any photo
+            to open the full viewer.
           </p>
           <div class="heroActions" style="margin-top: 18px">
-            <a class="btn btn-primary" href="/alt-contact.html#estimate">Get a Quote</a>
+            <a class="btn btn-primary btn-quote" href="/alt-contact.html#estimate">Get a Quote</a>
             <a class="btn btn-ghost" href="/alt-services.html">See Services</a>
           </div>
         </div>
       </section>
 
-      <div class="filtersBar" aria-label="Gallery filters">
+      <section class="section lightroomSection" aria-label="Featured project wall">
+        <div class="container">
+          <div class="sectionHeader">
+            <div>
+              <h2>Featured Project Wall</h2>
+              <p>
+                Custom-branded photo layout with no Lightroom profile badges or UI overlays.
+              </p>
+            </div>
+            <a class="btn btn-primary btn-quote" href="#gallery-filters">Browse by Category</a>
+          </div>
+
+          <div class="showcaseGrid reveal" data-gallery-showcase></div>
+          <p class="showcaseNote">Tap any card to open it in the full viewer.</p>
+        </div>
+      </section>
+
+      <div class="filtersBar" id="gallery-filters" aria-label="Gallery filters">
         <div class="container">
           <div class="filtersRow" data-gallery-filters></div>
         </div>
@@ -115,7 +129,7 @@
 
       <section aria-label="Gallery grid">
         <div class="container">
-          <div class="galleryGrid" data-gallery-grid></div>
+          <div class="galleryGrid" data-gallery-grid id="gallery-grid"></div>
         </div>
       </section>
 
@@ -126,11 +140,11 @@
               <h3 style="margin-bottom: 8px">Want something like this on your property?</h3>
               <p>
                 Call/text <a data-phone-href href="tel:+12545411867"><span data-phone-display>254-541-1867</span></a> or
-                send a message. Include the category letter and any photos of your space.
+                send a message. Include your service category and any photos of your space.
               </p>
             </div>
             <div class="ctaBandActions">
-              <a class="btn btn-primary" href="/alt-contact.html#estimate">Request a Quote</a>
+              <a class="btn btn-primary btn-quote" href="/alt-contact.html#estimate">Request a Quote</a>
               <a class="btn btn-ghost" href="/alt-contact.html">Get in Touch</a>
             </div>
           </div>
@@ -165,7 +179,6 @@
           <a href="/alt-gallery.html">Gallery</a>
           <a href="/alt-work-with-us.html">Work With Us</a>
           <a href="/alt-contact.html">Contact</a>
-          <a href="/" title="View the premium theme">Premium Theme</a>
         </div>
       </div>
     </footer>
@@ -174,6 +187,8 @@
     <script type="module" src="/src/scripts/gallery.js"></script>
   </body>
 </html>
+
+
 
 
 
