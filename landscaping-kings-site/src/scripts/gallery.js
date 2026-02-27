@@ -1,5 +1,12 @@
 import { SITE, route } from "./site-config.js";
 const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260226-1";
+const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
+
+function lbDebug(...args) {
+  if (!DEBUG_LIGHTBOX) return;
+  // eslint-disable-next-line no-console
+  console.log("[lightbox]", ...args);
+}
 
 function qs(sel, root = document) {
   return root.querySelector(sel);
@@ -126,10 +133,7 @@ function createShowcaseTile(item, categoryLabel, idx) {
 function ensureLightbox() {
   let root = qs("[data-lightbox]");
   if (root) {
-    const hasTrack = !!qs("[data-lb-track]", root);
-    const hasTitle = !!qs("[data-lb-title]", root);
-    const hasClose = !!qs("[data-close='true']", root);
-    if (hasTrack && hasTitle && hasClose) return root;
+    if (typeof root._cleanup === "function") root._cleanup();
     root.remove();
   }
 
@@ -152,7 +156,9 @@ function ensureLightbox() {
               <button class="iconBtn" type="button" data-close="true" aria-label="Close viewer">Close</button>
             </div>
           </div>
-          <div class="lightboxTrack" data-lb-track></div>
+          <div class="lightboxTrack" data-lb-track>
+            <img class="lightboxCurrentImage" data-lb-image alt="" loading="eager" decoding="async" />
+          </div>
           <div class="lightboxBottom">
             <div>
               <div class="lightboxTitle" data-lb-caption></div>
@@ -181,6 +187,7 @@ function ensureLightbox() {
   `;
 
   document.body.appendChild(root);
+  lbDebug("ensureLightbox: created fresh shell");
   return root;
 }
 
@@ -195,6 +202,12 @@ function clampInt(n, min, max) {
 
 function openLightbox(lb, items, startIndex, categoryLabel) {
   const track = qs("[data-lb-track]", lb);
+  const mainImg = qs("[data-lb-image]", lb);
+  const shell = qs(".lightboxShell", lb);
+  const stage = qs(".lightboxStage", lb);
+  const side = qs(".lightboxSide", lb);
+  const topBar = qs(".lightboxTop", lb);
+  const bottomBar = qs(".lightboxBottom", lb);
   const title = qs("[data-lb-title]", lb);
   const caption = qs("[data-lb-caption]", lb);
   const sub = qs("[data-lb-sub]", lb);
@@ -202,14 +215,18 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
   const nextImg = qs("[data-lb-next-img]", lb);
   const thumbRail = qs("[data-lb-thumbs]", lb);
   const total = Math.max(0, items.length);
-  if (!track || !total) return;
+  if (!track || !mainImg || !total) return;
+  lbDebug("openLightbox", { total, startIndex, categoryLabel });
 
   let activeIndex = clampInt(startIndex, 0, Math.max(0, total - 1));
   const getSafeItem = (idx) => items[clampInt(idx, 0, Math.max(0, items.length - 1))] || {};
+  const wrapIndex = (idx) => ((idx % total) + total) % total;
+  let renderToken = 0;
 
   const thumbs = [];
   if (thumbRail) {
     thumbRail.replaceChildren();
+
     items.forEach((item, idx) => {
       const thumbBtn = document.createElement("button");
       thumbBtn.type = "button";
@@ -229,6 +246,110 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
 
   lb.classList.add("isOpen");
   lockScroll(true);
+
+  const setMainImage = (idx) => {
+    const item = getSafeItem(idx);
+    const primarySrc = String(item?.src || "").trim();
+    const fallbackSrc = String(item?.thumb || primarySrc || "").trim();
+    const token = ++renderToken;
+
+    mainImg.alt = stripJobMarker(item?.alt || "");
+    if (fallbackSrc) {
+      mainImg.src = fallbackSrc;
+    } else {
+      mainImg.removeAttribute("src");
+    }
+
+    lbDebug("setMainImage: fallback", {
+      idx,
+      fallbackSrc,
+      primarySrc,
+      trackRect: track.getBoundingClientRect(),
+      imageRect: mainImg.getBoundingClientRect(),
+    });
+
+    if (primarySrc && primarySrc !== fallbackSrc) {
+      const hiRes = new Image();
+      hiRes.decoding = "async";
+      hiRes.onload = () => {
+        if (!mainImg.isConnected || token !== renderToken) return;
+        mainImg.src = primarySrc;
+        lbDebug("setMainImage: hi-res loaded", {
+          idx,
+          src: mainImg.currentSrc || mainImg.src,
+          natural: `${mainImg.naturalWidth}x${mainImg.naturalHeight}`,
+          rendered: `${Math.round(mainImg.getBoundingClientRect().width)}x${Math.round(mainImg.getBoundingClientRect().height)}`,
+        });
+      };
+      hiRes.onerror = () => {
+        if (!mainImg.isConnected || token !== renderToken) return;
+        if (fallbackSrc) mainImg.src = fallbackSrc;
+        lbDebug("setMainImage: hi-res failed, fallback restored", { idx, fallbackSrc });
+      };
+      hiRes.src = primarySrc;
+    }
+  };
+
+  mainImg.onerror = () => {
+    const item = getSafeItem(activeIndex);
+    const fallbackSrc = String(item?.thumb || item?.src || "").trim();
+    if (fallbackSrc && mainImg.src !== fallbackSrc) mainImg.src = fallbackSrc;
+    lbDebug("mainImg.onerror", { activeIndex, fallbackSrc });
+  };
+
+  mainImg.onload = () => {
+    lbDebug("mainImg.onload", {
+      activeIndex,
+      src: mainImg.currentSrc || mainImg.src,
+      natural: `${mainImg.naturalWidth}x${mainImg.naturalHeight}`,
+      rendered: `${Math.round(mainImg.getBoundingClientRect().width)}x${Math.round(mainImg.getBoundingClientRect().height)}`,
+      topDisplay: getComputedStyle(qs(".lightboxTop", lb)).display,
+    });
+  };
+
+  const syncTrackInsets = () => {
+    const topH = Math.ceil(topBar?.getBoundingClientRect().height || 0);
+    const bottomH = Math.ceil(bottomBar?.getBoundingClientRect().height || 0);
+    track.style.paddingTop = `${Math.max(18, topH + 10)}px`;
+    track.style.paddingBottom = `${Math.max(18, bottomH + 10)}px`;
+  };
+
+  const enforceLayoutBounds = () => {
+    if (stage) {
+      stage.style.gridTemplateRows = "minmax(0, 1fr)";
+      stage.style.alignItems = "stretch";
+    }
+    if (side) {
+      side.style.minHeight = "0";
+      side.style.overflow = "hidden";
+    }
+
+    const shellRect = shell?.getBoundingClientRect();
+    const trackRect = track.getBoundingClientRect();
+    const viewportH =
+      window.innerHeight || document.documentElement.clientHeight || 0;
+    const shellH = shellRect?.height || viewportH || 0;
+    const badHeight = trackRect.height > Math.max(shellH, viewportH) * 1.5;
+    const badTop =
+      shellRect && trackRect.top < shellRect.top - 120;
+    const badBottom =
+      shellRect && trackRect.bottom > shellRect.bottom + 120;
+
+    if (badHeight || badTop || badBottom) {
+      track.style.top = "0";
+      track.style.right = "0";
+      track.style.bottom = "0";
+      track.style.left = "0";
+      track.style.display = "grid";
+      track.style.placeItems = "center";
+      track.style.overflow = "hidden";
+      lbDebug("enforceLayoutBounds: corrected track geometry", {
+        shellRect,
+        trackRect,
+        viewportH,
+      });
+    }
+  };
 
   const updateMeta = () => {
     const idx = activeIndex;
@@ -256,17 +377,21 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
     if (activeThumb) activeThumb.scrollIntoView({ block: "nearest", inline: "nearest" });
   };
 
-  function mountActiveSlide() {
-    const item = getSafeItem(activeIndex);
-    const image = createLightboxImage(item);
-    track.replaceChildren(image);
+  const renderActive = () => {
+    enforceLayoutBounds();
+    syncTrackInsets();
+    setMainImage(activeIndex);
     updateMeta();
-  }
+    lbDebug("renderActive", {
+      activeIndex,
+      topText: title?.textContent || "",
+      trackOverflow: getComputedStyle(track).overflow,
+    });
+  };
 
   function goToIndex(nextIdx) {
-    const clamped = clampInt(nextIdx, 0, Math.max(0, total - 1));
-    activeIndex = clamped;
-    mountActiveSlide();
+    activeIndex = wrapIndex(nextIdx);
+    renderActive();
   }
 
   const onKeyDown = (e) => {
@@ -284,7 +409,7 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
     if (nextBtn) goToIndex(activeIndex + 1);
   };
 
-  const onResize = () => mountActiveSlide();
+  const onResize = () => renderActive();
   window.addEventListener("keydown", onKeyDown);
   window.addEventListener("resize", onResize, { passive: true });
   lb.addEventListener("click", onClick);
@@ -295,7 +420,10 @@ function openLightbox(lb, items, startIndex, categoryLabel) {
     lb.removeEventListener("click", onClick);
   };
 
-  requestAnimationFrame(mountActiveSlide);
+  requestAnimationFrame(() => {
+    renderActive();
+    setTimeout(syncTrackInsets, 80);
+  });
 }
 
 function closeLightbox(lb) {
@@ -303,34 +431,6 @@ function closeLightbox(lb) {
   lockScroll(false);
   if (typeof lb._cleanup === "function") lb._cleanup();
   lb._cleanup = null;
-}
-
-function createLightboxImage(item) {
-  const primarySrc = String(item?.src || "").trim();
-  const fallbackSrc = String(item?.thumb || primarySrc || "").trim();
-
-  const img = document.createElement("img");
-  img.className = "lightboxCurrentImage";
-  img.alt = stripJobMarker(item?.alt || "");
-  img.loading = "eager";
-  img.decoding = "async";
-  if (fallbackSrc) img.src = fallbackSrc;
-
-  img.addEventListener("error", () => {
-    if (fallbackSrc && img.src !== fallbackSrc) img.src = fallbackSrc;
-  });
-
-  // Render the known-good thumbnail first, then swap to full image when ready.
-  if (primarySrc && primarySrc !== fallbackSrc) {
-    const hiRes = new Image();
-    hiRes.decoding = "async";
-    hiRes.onload = () => {
-      if (img.isConnected) img.src = primarySrc;
-    };
-    hiRes.src = primarySrc;
-  }
-
-  return img;
 }
 
 async function runGallery() {
@@ -353,7 +453,6 @@ async function runGallery() {
   let activeTag = getQueryTag();
   if (activeTag && !tags.includes(activeTag)) activeTag = "";
 
-  const lb = ensureLightbox();
   let visibleItems = [];
 
   if (showcase) {
@@ -374,6 +473,7 @@ async function runGallery() {
       const byId = allItems.findIndex((x) => String(x.id || "") === itemId);
       const fallback = Number(btn.dataset.index || "0");
       const idx = byId >= 0 ? byId : fallback;
+      const lb = ensureLightbox();
       openLightbox(lb, allItems, idx, "All work");
     });
   }
@@ -414,6 +514,7 @@ async function runGallery() {
     const fallback = Number(btn.dataset.index || "0");
     const idx = byId >= 0 ? byId : fallback;
     const categoryLabel = activeTag ? categories[activeTag] || `Category ${activeTag}` : "All work";
+    const lb = ensureLightbox();
     openLightbox(lb, visibleItems, idx, categoryLabel);
   });
 
