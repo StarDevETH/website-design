@@ -2,7 +2,7 @@ import { SITE, route } from "./site-config.js";
 
 const COLOR_MODE_KEY = "dmk-color-mode";
 const DEFAULT_COLOR_MODE = "dark";
-const LOGO_ASSET_VERSION = "20260224-7";
+const LOGO_ASSET_VERSION = "20260227-3";
 const LOGO_LIGHT_SRC = `/assets/logo-bush-light.png?v=${LOGO_ASSET_VERSION}`;
 const LOGO_DARK_SRC = `/assets/logo-bush-dark.png?v=${LOGO_ASSET_VERSION}`;
 const REVIEW_STYLES = new Set(["glass", "cards", "compact"]);

@@ -1,5 +1,5 @@
 import { SITE, route } from "./site-config.js";
-const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260226-1";
+const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260227-3";
 const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
 
 function lbDebug(...args) {
