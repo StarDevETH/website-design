@@ -471,9 +471,8 @@ function renderGoogleForm(container, embedUrl) {
   if (!embedUrl) {
     container.innerHTML = `
       <div class="formPlaceholder">
-        <p><strong>Form not connected yet.</strong></p>
-        <p>Paste your Google Forms embed URL into <code>landscaping-kings-site/src/scripts/site-config.js</code> and reload.</p>
-        <p>Use the Google Forms “Send” → “&lt;&gt;” embed link.</p>
+        <p><strong>Online form is temporarily unavailable.</strong></p>
+        <p>Please call or text <a data-phone-href href="tel:+12545411867"><span data-phone-display>254-541-1867</span></a> and we will help right away.</p>
       </div>
     `;
     return;

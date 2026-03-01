@@ -10,8 +10,10 @@ export const SITE = {
   // Paste Google Forms "Embed" URLs here when ready.
   // Example embed URL format:
   //   https://docs.google.com/forms/d/e/<FORM_ID>/viewform?embedded=true
-  contactFormEmbedUrl: "",
-  workWithUsFormEmbedUrl: ""
+  contactFormEmbedUrl:
+    "https://docs.google.com/forms/d/e/1FAIpQLSdFWnJL9NzEFO5b-RAUx-daBXxd4dN0BFK_CSKf7DmWieanPA/viewform?embedded=true",
+  workWithUsFormEmbedUrl:
+    "https://docs.google.com/forms/d/e/1FAIpQLSf-IURBKZU7KC17pAMvOFBqEkBL6xjXBByM7PPWVpyWOOaNxQ/viewform?embedded=true"
 };
 
 export function route(name) {

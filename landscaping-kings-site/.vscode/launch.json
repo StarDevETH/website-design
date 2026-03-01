@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Chrome (Gallery Debug)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:5173/gallery?debugLightbox=1",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "smartStep": true
+    },
+    {
+      "name": "Attach Chrome (Port 9222)",
+      "type": "pwa-chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true
+    }
+  ]
+}
