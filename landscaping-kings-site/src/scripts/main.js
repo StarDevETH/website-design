@@ -1,4 +1,4 @@
-import { SITE, route } from "./site-config.js";
+﻿import { FORMSPREE, SITE, route } from "./site-config.js";
 
 const COLOR_MODE_KEY = "dmk-color-mode";
 const DEFAULT_COLOR_MODE = "dark";
@@ -8,6 +8,29 @@ const LOGO_DARK_SRC = `/assets/logo-bush-dark.png?v=${LOGO_ASSET_VERSION}`;
 const REVIEW_STYLES = new Set(["glass", "cards", "compact"]);
 const GOOGLE_REVIEWS_URL =
   "https://share.google/FlHwn4OswIDit1eaL";
+const QUOTE_VALIDATION_ERROR =
+  "Please complete all required fields and select at least one service.";
+const QUOTE_SUBMIT_ERROR =
+  "Submission did not go through. Please try again or call/text 254-541-1867.";
+const JOB_VALIDATION_ERROR =
+  "Please complete all required fields and check both consent boxes before submitting.";
+const JOB_SUBMIT_ERROR =
+  "Application did not go through. Please try again or call/text 254-541-1867.";
+const FORMSPREE_CONFIG_ERROR =
+  "Online form is temporarily unavailable. Please call/text 254-541-1867.";
+const JOB_REQUIRED_RADIOS = [
+  "age_16_or_older",
+  "work_authorized_us",
+  "requires_visa_sponsorship",
+  "can_work_service_area",
+  "available_early_mornings",
+  "reliable_transportation",
+  "can_meet_physical_requirements",
+  "comfortable_outdoors_texas",
+  "follows_safety_rules",
+  "has_valid_drivers_license",
+  "shows_up_on_time"
+];
 const HERO_REVIEW_SUMMARY = {
   rating: "4.8",
   count: 29
@@ -97,7 +120,7 @@ function getSystemMode() {
 
 function getDefaultMode() {
   const fromMarkup = normalizeMode(document.documentElement?.dataset?.mode);
-  return fromMarkup || DEFAULT_COLOR_MODE;
+  return fromMarkup || getSystemMode();
 }
 
 function applyColorMode(mode) {
@@ -465,32 +488,208 @@ async function renderGalleryPreview() {
   }
 }
 
-function renderGoogleForm(container, embedUrl) {
-  if (!container) return;
+function isConfiguredFormspreeEndpoint(value) {
+  return /^https:\/\/formspree\.io\/f\/[A-Za-z0-9]+$/i.test(String(value || "").trim());
+}
 
-  if (!embedUrl) {
-    container.innerHTML = `
-      <div class="formPlaceholder">
-        <p><strong>Online form is temporarily unavailable.</strong></p>
-        <p>Please call or text <a data-phone-href href="tel:+12545411867"><span data-phone-display>254-541-1867</span></a> and we will help right away.</p>
-      </div>
-    `;
-    return;
+async function submitToFormspree(form, endpoint, extras = {}) {
+  if (!isConfiguredFormspreeEndpoint(endpoint)) {
+    throw new Error("Formspree endpoint not configured");
   }
 
-  const iframe = document.createElement("iframe");
-  iframe.title = "Form";
-  iframe.loading = "lazy";
-  iframe.referrerPolicy = "no-referrer-when-downgrade";
-  iframe.src = embedUrl;
-  container.replaceChildren(iframe);
+  const formData = new FormData(form);
+  Object.entries(extras).forEach(([key, value]) => {
+    if (value == null || value === "") return;
+    formData.append(key, value);
+  });
+
+  const replyTo = formData.get("email_address");
+  if (typeof replyTo === "string" && replyTo.trim()) {
+    formData.set("_replyto", replyTo.trim());
+  }
+
+  formData.append("business_name", SITE.businessName);
+  formData.append("service_area", SITE.serviceArea);
+  formData.append("source_page", window.location.href);
+  formData.append("submitted_at", new Date().toISOString());
+
+  const response = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      Accept: "application/json"
+    },
+    body: formData
+  });
+
+  if (response.ok) return;
+
+  let message = "";
+  try {
+    const data = await response.json();
+    if (Array.isArray(data?.errors)) {
+      message = data.errors.map((item) => item?.message).filter(Boolean).join(" ");
+    }
+  } catch (_) {
+    // Ignore parse errors and fall back to generic error handling below.
+  }
+
+  throw new Error(message || "Formspree rejected the submission");
 }
 
-function renderForms() {
-  renderGoogleForm(qs("[data-google-form='contact']"), SITE.contactFormEmbedUrl);
-  renderGoogleForm(qs("[data-google-form='work']"), SITE.workWithUsFormEmbedUrl);
+function initQuoteForm() {
+  const form = qs("#quoteForm");
+  if (!form) return;
+
+  const button = qs("#quoteSubmitBtn");
+  const error = qs("#quoteErrorBanner");
+  const wrap = qs("#quoteFormWrap");
+  const success = qs("#quoteSuccessScreen");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let valid = true;
+
+    qsa("input[required]", form).forEach((el) => {
+      if (!el.value.trim()) {
+        el.classList.add("error");
+        valid = false;
+      } else {
+        el.classList.remove("error");
+      }
+    });
+
+    if (!qs('[name="services_interested_in[]"]:checked', form)) valid = false;
+
+    if (!valid) {
+      if (error) {
+        error.textContent = QUOTE_VALIDATION_ERROR;
+        error.style.display = "block";
+      }
+      return;
+    }
+
+    if (error) error.style.display = "none";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Sending...";
+    }
+
+    try {
+      await submitToFormspree(form, FORMSPREE.quoteEndpoint, {
+        _subject: "New Quote Request - D&M Landscaping Kings LLC",
+        form_name: "Quote Request"
+      });
+
+      form.reset();
+      if (wrap) wrap.style.display = "none";
+      if (success) {
+        success.style.display = "block";
+        success.scrollIntoView({ block: "nearest" });
+      }
+    } catch (_) {
+      if (error) {
+        error.textContent = isConfiguredFormspreeEndpoint(FORMSPREE.quoteEndpoint)
+          ? QUOTE_SUBMIT_ERROR
+          : FORMSPREE_CONFIG_ERROR;
+        error.style.display = "block";
+        error.scrollIntoView({ block: "nearest" });
+      }
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Request My Free Estimate";
+      }
+    }
+  });
+
+  qsa("input", form).forEach((el) => {
+    el.addEventListener("input", () => el.classList.remove("error"));
+    el.addEventListener("change", () => el.classList.remove("error"));
+  });
 }
 
+function initJobApplicationForm() {
+  const form = qs("#jobForm");
+  if (!form) return;
+
+  const button = qs("#jobSubmitBtn");
+  const error = qs("#jobErrorBanner");
+  const wrap = qs("#jobFormWrap");
+  const success = qs("#jobSuccessScreen");
+  const consent = qs("#jobConsent");
+  const certify = qs("#jobCertification");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    let valid = true;
+
+    qsa('input[required]:not([type="radio"]):not([type="checkbox"]), select[required]', form).forEach(
+      (el) => {
+        if (!el.value.trim()) {
+          el.classList.add("error");
+          valid = false;
+        } else {
+          el.classList.remove("error");
+        }
+      }
+    );
+
+    JOB_REQUIRED_RADIOS.forEach((name) => {
+      if (!qs(`[name="${name}"]:checked`, form)) valid = false;
+    });
+
+    if (!qs('[name="available_days[]"]:checked', form)) valid = false;
+    if (!consent?.checked) valid = false;
+    if (!certify?.checked) valid = false;
+
+    if (!valid) {
+      if (error) {
+        error.textContent = JOB_VALIDATION_ERROR;
+        error.style.display = "block";
+        error.scrollIntoView({ block: "nearest" });
+      }
+      return;
+    }
+
+    if (error) error.style.display = "none";
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Submitting...";
+    }
+
+    try {
+      await submitToFormspree(form, FORMSPREE.jobEndpoint, {
+        _subject: "New Crew Application - D&M Landscaping Kings LLC",
+        form_name: "Crew Application"
+      });
+
+      form.reset();
+      if (wrap) wrap.style.display = "none";
+      if (success) {
+        success.style.display = "block";
+        success.scrollIntoView({ block: "nearest" });
+      }
+    } catch (_) {
+      if (error) {
+        error.textContent = isConfiguredFormspreeEndpoint(FORMSPREE.jobEndpoint)
+          ? JOB_SUBMIT_ERROR
+          : FORMSPREE_CONFIG_ERROR;
+        error.style.display = "block";
+        error.scrollIntoView({ block: "nearest" });
+      }
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Submit My Application";
+      }
+    }
+  });
+
+  qsa("input, select, textarea", form).forEach((el) => {
+    el.addEventListener("input", () => el.classList.remove("error"));
+    el.addEventListener("change", () => el.classList.remove("error"));
+  });
+}
 async function run() {
   initColorMode();
   initStickyOffsets();
@@ -500,7 +699,8 @@ async function run() {
   initHeroReviews();
   initReveals();
   hydrateSiteBits();
-  renderForms();
+  initQuoteForm();
+  initJobApplicationForm();
 
   try {
     await Promise.all([renderServices(), renderGalleryPreview()]);
@@ -512,4 +712,5 @@ async function run() {
 }
 
 run();
+
 

@@ -181,7 +181,271 @@
           </div>
 
           <div class="formShell">
-            <div data-google-form="work"></div>
+            <div class="customForm">
+              <div class="customFormCard">
+                <div id="jobFormWrap">
+                  <div class="customFormAccent"></div>
+                  <h3 class="customFormTitle">Crew Application</h3>
+                  <p class="customFormSubtitle">
+                    We're always looking for reliable, hardworking people to join the D&amp;M team. Fill out the form below. It only takes a few minutes, and we'll be in touch.
+                  </p>
+
+                  <form id="jobForm" novalidate>
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">1</div>
+                      <div class="customFormSectionTitle">Legal Eligibility</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Are you at least 16 years old? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="age_16_or_older" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="age_16_or_older" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Are you legally authorized to work in the United States? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="work_authorized_us" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="work_authorized_us" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Will you now or in the future require employer sponsorship for work visa status? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="requires_visa_sponsorship" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="requires_visa_sponsorship" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">2</div>
+                      <div class="customFormSectionTitle">Contact Information</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="j_name">Full Legal Name <span class="customFormReq">*</span></label>
+                      <input type="text" id="j_name" name="full_legal_name" placeholder="As it appears on your ID" required />
+                    </div>
+
+                    <div class="customFormRow2">
+                      <div class="customFormField">
+                        <label class="customFormLabel" for="j_phone">Phone Number <span class="customFormReq">*</span></label>
+                        <input type="tel" id="j_phone" name="phone_number" placeholder="(254) 000-0000" required />
+                      </div>
+                      <div class="customFormField">
+                        <label class="customFormLabel" for="j_email">Email Address <span class="customFormReq">*</span></label>
+                        <input type="email" id="j_email" name="email_address" placeholder="you@example.com" required />
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="j_city">City + ZIP Code <span class="customFormReq">*</span></label>
+                      <input type="text" id="j_city" name="city_zip_code" placeholder="Temple, TX 76501" required />
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">3</div>
+                      <div class="customFormSectionTitle">Location &amp; Availability</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Can you work at jobsites in/around Temple, Belton, Salado, and Killeen? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="can_work_service_area" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="can_work_service_area" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="j_start">When can you start?</label>
+                      <input type="date" id="j_start" name="available_start_date" />
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">What days are you generally available? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Monday" /> Mon</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Tuesday" /> Tue</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Wednesday" /> Wed</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Thursday" /> Thu</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Friday" /> Fri</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Saturday" /> Sat</label>
+                        <label class="customFormChip"><input type="checkbox" name="available_days[]" value="Sunday" /> Sun</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Available for early morning start times when scheduled? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="available_early_mornings" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="available_early_mornings" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Do you have reliable transportation to consistently arrive on time? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="reliable_transportation" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="reliable_transportation" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">4</div>
+                      <div class="customFormSectionTitle">Physical Job Requirements</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">
+                        Can you perform essential job functions with or without reasonable accommodation?
+                        <span class="customFormNote">This includes lifting up to ~50 lbs, bending, and standing for long hours.</span>
+                        <span class="customFormReq">*</span>
+                      </label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="can_meet_physical_requirements" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="can_meet_physical_requirements" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Comfortable working outdoors in Central Texas weather conditions? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="comfortable_outdoors_texas" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="comfortable_outdoors_texas" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Willing to follow all safety rules and wear required PPE? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="follows_safety_rules" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="follows_safety_rules" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">5</div>
+                      <div class="customFormSectionTitle">Experience Snapshot</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="j_exp">How much landscaping or outdoor labor experience do you have? <span class="customFormReq">*</span></label>
+                      <select id="j_exp" name="experience_level" required>
+                        <option value="" disabled selected>Select one...</option>
+                        <option value="No experience (willing to learn)">No experience (willing to learn)</option>
+                        <option value="Less than 6 months">Less than 6 months</option>
+                        <option value="6-24 months">6-24 months</option>
+                        <option value="2+ years">2+ years</option>
+                      </select>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">What type of work have you done? (check all that apply)</label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Mowing/edging/trimming/blowing" /> Mowing / Edging / Trimming</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Mulch/bed cleanouts" /> Mulch &amp; Bed Cleanouts</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Planting/sod" /> Planting / Sod</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Irrigation" /> Irrigation</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Hardscape/pavers" /> Hardscape / Pavers</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Fence/deck work" /> Fence / Deck Work</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Equipment operation" /> Equipment Operation</label>
+                        <label class="customFormChip"><input type="checkbox" name="work_types_done[]" value="Other" /> Other</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Equipment you've operated: (check all that apply)</label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="String trimmer" /> String Trimmer</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Blower" /> Blower</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Push mower" /> Push Mower</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Zero-turn mower" /> Zero-Turn Mower</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Chainsaw" /> Chainsaw</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Skid steer" /> Skid Steer</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="Truck + trailer" /> Truck + Trailer</label>
+                        <label class="customFormChip"><input type="checkbox" name="equipment_operated[]" value="None yet" /> None Yet</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Do you have a valid (non-expired) driver's license? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="has_valid_drivers_license" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="has_valid_drivers_license" value="No" /> No</label>
+                        <label class="customFormChip"><input type="radio" name="has_valid_drivers_license" value="N/A" /> N/A</label>
+                      </div>
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">6</div>
+                      <div class="customFormSectionTitle">Reliability &amp; Work Style</div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Can you consistently show up on time and communicate if you cannot make a shift? <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="shows_up_on_time" value="Yes" required /> Yes</label>
+                        <label class="customFormChip"><input type="radio" name="shows_up_on_time" value="No" /> No</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="j_fit">Why would you be a good fit for a hardworking outdoor crew?</label>
+                      <textarea id="j_fit" name="why_good_fit" placeholder="Tell us a bit about yourself, your work ethic, and why you want to work with D&amp;M..."></textarea>
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormSectionHeader">
+                      <div class="customFormSectionNum">7</div>
+                      <div class="customFormSectionTitle">Consent &amp; Certification</div>
+                    </div>
+
+                    <div class="customFormConsent">
+                      <label>
+                        <input type="checkbox" name="consent_contact" value="I agree D&amp;M Landscaping Kings LLC may contact me" id="jobConsent" required />
+                        <span>I agree that D&amp;M Landscaping Kings LLC may contact me regarding my application via the phone number and email I provided.</span>
+                      </label>
+                    </div>
+
+                    <div class="customFormConsent">
+                      <label>
+                        <input type="checkbox" name="certify_information" value="I certify information is true and complete" id="jobCertification" required />
+                        <span>I certify that all information I have provided in this application is true, accurate, and complete to the best of my knowledge.</span>
+                      </label>
+                    </div>
+
+                    <div class="customFormError" id="jobErrorBanner">
+                      Please complete all required fields and check both consent boxes before submitting.
+                    </div>
+
+                    <button type="submit" class="customFormSubmit" id="jobSubmitBtn">Submit My Application &rarr;</button>
+                    <p class="customFormNotice">Your information is kept private and only used for hiring purposes.</p>
+                  </form>
+                </div>
+
+                <div class="customFormSuccess" id="jobSuccessScreen">
+                  <div class="customFormSuccessIcon">&#10003;</div>
+                  <h3>Application Submitted!</h3>
+                  <p>
+                    Thanks for applying to join the D&amp;M Landscaping Kings crew. We review every application and will reach out if you look like a good fit. Keep an eye on your phone and email.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -646,6 +646,14 @@ html[data-mode="dark"] .tile:hover {
   padding: var(--section) 0;
 }
 
+.page-work section[aria-label="What we look for"] {
+  padding-bottom: calc(var(--section) * 0.75);
+}
+
+.page-work #apply.section {
+  padding-top: calc(var(--section) * 0.75);
+}
+
 .sectionHeader {
   display: flex;
   align-items: flex-end;
@@ -1340,10 +1348,10 @@ html[data-mode="dark"] .tile:hover {
 
 .formShell iframe {
   width: 100%;
-  height: 1120px;
+  min-height: 1120px;
   border: 0;
   border-radius: 14px;
-  background: #fff;
+  background: transparent;
   display: block;
 }
 
@@ -1352,6 +1360,429 @@ html[data-mode="dark"] .tile:hover {
   color: rgba(232, 241, 234, 0.9);
   background: rgba(8, 12, 16, 0.68);
   border: 1px solid rgba(87, 195, 67, 0.34);
+}
+
+.customForm {
+  --cf-accent: #1f6a45;
+  --cf-card-bg: #fbf8f2;
+  --cf-card-border: #e8e5dc;
+  --cf-card-shadow: 0 4px 24px rgba(16, 32, 21, 0.08);
+  --cf-title: #102015;
+  --cf-text: #102015;
+  --cf-muted: #3e4b40;
+  --cf-input-bg: #fff;
+  --cf-input-border: #e8e5dc;
+  --cf-chip-bg: #fff;
+  --cf-chip-border: #e8e5dc;
+  --cf-chip-text: #3e4b40;
+  --cf-chip-active-bg: #e8f1ea;
+  --cf-chip-active-border: #1f6a45;
+  --cf-chip-active-text: #1f6a45;
+  --cf-divider: #e8e5dc;
+  --cf-consent-bg: #fff;
+  --cf-consent-border: #e8e5dc;
+  --cf-consent-active-bg: #e8f1ea;
+  --cf-consent-active-border: #1f6a45;
+  --cf-error-bg: #fff5f5;
+  --cf-error-border: #fca5a5;
+  --cf-error-text: #b91c1c;
+  --cf-success-ring: #1f6a45;
+  --cf-success-bg: #e8f1ea;
+  --cf-placeholder: rgba(62, 75, 64, 0.72);
+  color: var(--cf-text);
+}
+
+.customFormCard {
+  background: var(--cf-card-bg);
+  border: 1px solid var(--cf-card-border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: var(--cf-card-shadow);
+}
+
+.customFormAccent {
+  width: 44px;
+  height: 4px;
+  background: var(--cf-accent);
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.customFormTitle {
+  margin: 0 0 8px;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--cf-title);
+}
+
+.customFormSubtitle {
+  margin: 0 0 28px;
+  color: var(--cf-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.customFormSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 30px 0 18px;
+}
+
+.customFormSectionNum {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--cf-accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.customFormSectionTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--cf-accent);
+}
+
+.customFormRow2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.customFormField {
+  margin-bottom: 18px;
+}
+
+.customFormLabel {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--cf-muted);
+}
+
+.customFormNote {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.customFormReq {
+  color: var(--cf-accent);
+}
+
+.customForm input[type="text"],
+.customForm input[type="email"],
+.customForm input[type="tel"],
+.customForm input[type="date"],
+.customForm textarea,
+.customForm select {
+  width: 100%;
+  border: 1.5px solid var(--cf-input-border);
+  border-radius: 12px;
+  background: var(--cf-input-bg);
+  color: var(--cf-text);
+  padding: 11px 15px;
+  font: inherit;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.customForm input::placeholder,
+.customForm textarea::placeholder {
+  color: var(--cf-placeholder);
+}
+
+.customForm textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.customForm select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%233E4B40' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  padding-right: 38px;
+  cursor: pointer;
+}
+
+.customForm input:focus,
+.customForm textarea:focus,
+.customForm select:focus {
+  border-color: var(--cf-accent);
+  box-shadow: 0 0 0 3px rgba(31, 106, 69, 0.13);
+}
+
+.customForm input.error,
+.customForm textarea.error,
+.customForm select.error {
+  border-color: #d9534f !important;
+}
+
+.customFormChipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.customFormChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border: 1.5px solid var(--cf-chip-border);
+  border-radius: 999px;
+  background: var(--cf-chip-bg);
+  color: var(--cf-chip-text);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.customFormChip:hover,
+.customFormChip:has(input:checked) {
+  border-color: var(--cf-chip-active-border);
+  background: var(--cf-chip-active-bg);
+  color: var(--cf-chip-active-text);
+}
+
+.customFormChip input[type="checkbox"],
+.customFormChip input[type="radio"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--cf-accent);
+  color-scheme: light;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.customFormDivider {
+  border: 0;
+  border-top: 1px solid var(--cf-divider);
+  margin: 28px 0;
+}
+
+.customFormConsent {
+  margin-bottom: 14px;
+  border: 1.5px solid var(--cf-consent-border);
+  border-radius: 14px;
+  background: var(--cf-consent-bg);
+  padding: 16px 18px;
+}
+
+.customFormConsent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  color: var(--cf-chip-text);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+.customFormConsent input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--cf-accent);
+  color-scheme: light;
+  flex-shrink: 0;
+}
+
+.customFormConsent:has(input:checked) {
+  border-color: var(--cf-consent-active-border);
+  background: var(--cf-consent-active-bg);
+}
+
+.customFormError {
+  display: none;
+  margin-top: 12px;
+  border: 1px solid var(--cf-error-border);
+  border-radius: 12px;
+  background: var(--cf-error-bg);
+  color: var(--cf-error-text);
+  padding: 11px 15px;
+  font-size: 0.85rem;
+}
+
+.customFormSubmit {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--brand);
+  color: #fff;
+  padding: 15px 32px;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.12s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 14px rgba(87, 195, 67, 0.28);
+}
+
+.customFormSubmit:hover {
+  background: var(--brand2);
+  box-shadow: 0 5px 20px rgba(36, 38, 50, 0.28);
+}
+
+.customFormSubmit:active {
+  transform: scale(0.98);
+}
+
+.customFormSubmit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.customFormNotice {
+  margin: 12px 0 0;
+  text-align: center;
+  color: var(--cf-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.customFormSuccess {
+  display: none;
+  text-align: center;
+  padding: 56px 24px;
+}
+
+.customFormSuccessIcon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 22px;
+  border: 2px solid var(--cf-success-ring);
+  border-radius: 999px;
+  background: var(--cf-success-bg);
+  color: var(--cf-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  font-weight: 800;
+}
+
+.customFormSuccess h3 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--cf-title);
+}
+
+.customFormSuccess p {
+  margin: 0 auto;
+  max-width: 420px;
+  color: var(--cf-muted);
+  line-height: 1.65;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode="light"]) .customForm {
+    --cf-accent: #7ee86b;
+    --cf-card-bg: #0e1812;
+    --cf-card-border: rgba(87, 195, 67, 0.22);
+    --cf-card-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+    --cf-title: #e8f1ea;
+    --cf-text: #e8f1ea;
+    --cf-muted: rgba(232, 241, 234, 0.78);
+    --cf-input-bg: #141e18;
+    --cf-input-border: rgba(255, 255, 255, 0.12);
+    --cf-chip-bg: #141e18;
+    --cf-chip-border: rgba(255, 255, 255, 0.12);
+    --cf-chip-text: rgba(232, 241, 234, 0.8);
+    --cf-chip-active-bg: rgba(87, 195, 67, 0.12);
+    --cf-chip-active-border: rgba(87, 195, 67, 0.65);
+    --cf-chip-active-text: rgba(126, 232, 107, 0.95);
+    --cf-divider: rgba(255, 255, 255, 0.08);
+    --cf-consent-bg: #141e18;
+    --cf-consent-border: rgba(255, 255, 255, 0.12);
+    --cf-consent-active-bg: rgba(87, 195, 67, 0.12);
+    --cf-consent-active-border: rgba(87, 195, 67, 0.65);
+    --cf-error-bg: rgba(127, 29, 29, 0.2);
+    --cf-error-border: rgba(248, 113, 113, 0.5);
+    --cf-error-text: #fecaca;
+    --cf-success-ring: rgba(87, 195, 67, 0.65);
+    --cf-success-bg: rgba(87, 195, 67, 0.14);
+    --cf-placeholder: rgba(232, 241, 234, 0.46);
+  }
+
+  html:not([data-mode="light"]) .customForm select,
+  html:not([data-mode="light"]) .customForm textarea,
+  html:not([data-mode="light"]) .customForm input[type="text"],
+  html:not([data-mode="light"]) .customForm input[type="email"],
+  html:not([data-mode="light"]) .customForm input[type="tel"],
+  html:not([data-mode="light"]) .customForm input[type="date"] {
+    color-scheme: dark;
+  }
+
+  html:not([data-mode="light"]) .customFormChip input[type="checkbox"],
+  html:not([data-mode="light"]) .customFormChip input[type="radio"],
+  html:not([data-mode="light"]) .customFormConsent input[type="checkbox"] {
+    color-scheme: dark;
+  }
+}
+
+html[data-mode="dark"] .customForm {
+  --cf-accent: #7ee86b;
+  --cf-card-bg: #0e1812;
+  --cf-card-border: rgba(87, 195, 67, 0.22);
+  --cf-card-shadow: 0 18px 44px rgba(0, 0, 0, 0.34);
+  --cf-title: #e8f1ea;
+  --cf-text: #e8f1ea;
+  --cf-muted: rgba(232, 241, 234, 0.78);
+  --cf-input-bg: #141e18;
+  --cf-input-border: rgba(255, 255, 255, 0.12);
+  --cf-chip-bg: #141e18;
+  --cf-chip-border: rgba(255, 255, 255, 0.12);
+  --cf-chip-text: rgba(232, 241, 234, 0.8);
+  --cf-chip-active-bg: rgba(87, 195, 67, 0.12);
+  --cf-chip-active-border: rgba(87, 195, 67, 0.65);
+  --cf-chip-active-text: rgba(126, 232, 107, 0.95);
+  --cf-divider: rgba(255, 255, 255, 0.08);
+  --cf-consent-bg: #141e18;
+  --cf-consent-border: rgba(255, 255, 255, 0.12);
+  --cf-consent-active-bg: rgba(87, 195, 67, 0.12);
+  --cf-consent-active-border: rgba(87, 195, 67, 0.65);
+  --cf-error-bg: rgba(127, 29, 29, 0.2);
+  --cf-error-border: rgba(248, 113, 113, 0.5);
+  --cf-error-text: #fecaca;
+  --cf-success-ring: rgba(87, 195, 67, 0.65);
+  --cf-success-bg: rgba(87, 195, 67, 0.14);
+  --cf-placeholder: rgba(232, 241, 234, 0.46);
+}
+
+html[data-mode="dark"] .customForm select,
+html[data-mode="dark"] .customForm textarea,
+html[data-mode="dark"] .customForm input[type="text"],
+html[data-mode="dark"] .customForm input[type="email"],
+html[data-mode="dark"] .customForm input[type="tel"],
+html[data-mode="dark"] .customForm input[type="date"],
+html[data-mode="dark"] .customFormChip input[type="checkbox"],
+html[data-mode="dark"] .customFormChip input[type="radio"],
+html[data-mode="dark"] .customFormConsent input[type="checkbox"] {
+  color-scheme: dark;
 }
 
 .reveal {
@@ -1382,6 +1813,14 @@ html[data-mode="dark"] .tile:hover {
 
   .heroGlow {
     opacity: 0.55;
+  }
+
+  .customFormCard {
+    padding: 24px 18px;
+  }
+
+  .customFormRow2 {
+    grid-template-columns: 1fr;
   }
 
   .showcaseGrid {
@@ -1520,6 +1959,6 @@ html[data-mode="dark"] .tile:hover {
   }
 
   .formShell iframe {
-    height: 1100px;
+    min-height: 1100px;
   }
 }

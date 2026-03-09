@@ -182,7 +182,87 @@
           </div>
 
           <div class="formShell">
-            <div data-google-form="contact"></div>
+            <div class="customForm">
+              <div class="customFormCard">
+                <div id="quoteFormWrap">
+                  <div class="customFormAccent"></div>
+                  <h3 class="customFormTitle">Request a Free Estimate</h3>
+                  <p class="customFormSubtitle">
+                    Fill out the short form below and we'll reach out to schedule your free, no-obligation quote.
+                  </p>
+
+                  <form id="quoteForm" novalidate>
+                    <div class="customFormRow2">
+                      <div class="customFormField">
+                        <label class="customFormLabel" for="q_name">Full Name <span class="customFormReq">*</span></label>
+                        <input type="text" id="q_name" name="full_name" placeholder="Jane Smith" required />
+                      </div>
+                      <div class="customFormField">
+                        <label class="customFormLabel" for="q_phone">Phone Number <span class="customFormReq">*</span></label>
+                        <input type="tel" id="q_phone" name="phone_number" placeholder="(254) 000-0000" required />
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="q_email">Email Address</label>
+                      <input type="email" id="q_email" name="email_address" placeholder="you@example.com" />
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="q_addr">Service Address <span class="customFormReq">*</span></label>
+                      <input type="text" id="q_addr" name="service_address" placeholder="123 Main St or nearest cross streets" required />
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel" for="q_city">City + ZIP Code <span class="customFormReq">*</span></label>
+                      <input type="text" id="q_city" name="city_zip_code" placeholder="Temple, TX 76501" required />
+                    </div>
+
+                    <hr class="customFormDivider" />
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Services Interested In <span class="customFormReq">*</span></label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Shrub &amp; Tree Installation" /> Shrub &amp; Tree Installation</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Garden Beds &amp; Planting" /> Garden Beds &amp; Planting</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Walkways, Pavers &amp; Flagstone" /> Walkways, Pavers &amp; Flagstone</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Lawn &amp; Turf Services (Sod / Repairs / Grading)" /> Lawn &amp; Turf Services</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Soil &amp; Mulching" /> Soil &amp; Mulching</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Tree &amp; Stump Services" /> Tree &amp; Stump Services</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Fences &amp; Decks" /> Fences &amp; Decks</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Water Features &amp; Lighting" /> Water Features &amp; Lighting</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Rock &amp; Decorative Beds" /> Rock &amp; Decorative Beds</label>
+                        <label class="customFormChip"><input type="checkbox" name="services_interested_in[]" value="Other" /> Other</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormField">
+                      <label class="customFormLabel">Preferred Method of Contact</label>
+                      <div class="customFormChipGroup">
+                        <label class="customFormChip"><input type="radio" name="preferred_contact_method" value="Call" /> Call</label>
+                        <label class="customFormChip"><input type="radio" name="preferred_contact_method" value="Text" /> Text</label>
+                        <label class="customFormChip"><input type="radio" name="preferred_contact_method" value="Email" /> Email</label>
+                      </div>
+                    </div>
+
+                    <div class="customFormError" id="quoteErrorBanner">
+                      Please complete all required fields and select at least one service.
+                    </div>
+
+                    <button type="submit" class="customFormSubmit" id="quoteSubmitBtn">Request My Free Estimate &rarr;</button>
+                    <p class="customFormNotice">We typically respond within 1 business day. Your info stays private.</p>
+                  </form>
+                </div>
+
+                <div class="customFormSuccess" id="quoteSuccessScreen">
+                  <div class="customFormSuccessIcon">&#10003;</div>
+                  <h3>Request Received!</h3>
+                  <p>
+                    Thanks for reaching out. A member of the D&amp;M Landscaping Kings team will follow up with you shortly to schedule your free estimate.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

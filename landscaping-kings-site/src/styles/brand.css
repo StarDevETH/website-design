@@ -165,7 +165,7 @@ h3 {
 
 .siteHeader {
   position: fixed;
-  top: var(--topbar-h, 0px);
+  top: calc(var(--topbar-h, 0px) - 1px);
   left: 0;
   right: 0;
   width: 100%;
