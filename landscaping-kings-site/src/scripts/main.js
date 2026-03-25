@@ -70,6 +70,27 @@ function qsa(sel, root = document) {
   return Array.from(root.querySelectorAll(sel));
 }
 
+function rewriteAdobeImageUrl(url) {
+  const raw = String(url || "").trim();
+  if (!raw) return "";
+
+  const match = raw.match(
+    /^https:\/\/photos\.adobe\.io\/v2\/spaces\/([a-f0-9]+)\/(.+)$/i
+  );
+  if (!match) return raw;
+
+  const [, shareId, assetPath] = match;
+  return `https://lightroom.adobe.com/v2c/spaces/${shareId}/${assetPath}`;
+}
+
+function normalizeGalleryItem(item) {
+  return {
+    ...item,
+    src: rewriteAdobeImageUrl(item?.src),
+    thumb: rewriteAdobeImageUrl(item?.thumb),
+  };
+}
+
 function setText(el, value) {
   if (!el) return;
   el.textContent = value;
@@ -479,7 +500,7 @@ async function renderGalleryPreview() {
     loadJson("/data/gallery.json")
   ]);
 
-  const items = (galleryJson.items || []).slice(0, 10);
+  const items = (galleryJson.items || []).map(normalizeGalleryItem).slice(0, 10);
   wrap.replaceChildren();
 
   for (const item of items) {

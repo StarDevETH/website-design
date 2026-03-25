@@ -16,6 +16,27 @@ function qsa(sel, root = document) {
   return Array.from(root.querySelectorAll(sel));
 }
 
+function rewriteAdobeImageUrl(url) {
+  const raw = String(url || "").trim();
+  if (!raw) return "";
+
+  const match = raw.match(
+    /^https:\/\/photos\.adobe\.io\/v2\/spaces\/([a-f0-9]+)\/(.+)$/i
+  );
+  if (!match) return raw;
+
+  const [, shareId, assetPath] = match;
+  return `https://lightroom.adobe.com/v2c/spaces/${shareId}/${assetPath}`;
+}
+
+function normalizeGalleryItem(item) {
+  return {
+    ...item,
+    src: rewriteAdobeImageUrl(item?.src),
+    thumb: rewriteAdobeImageUrl(item?.thumb),
+  };
+}
+
 async function loadJson(path) {
   const res = await fetch(path, { headers: { Accept: "application/json" } });
   if (!res.ok) throw new Error(`Failed to load ${path}: ${res.status}`);
@@ -444,7 +465,7 @@ async function runGallery() {
     loadJson("/data/gallery.json"),
   ]);
 
-  const allItems = galleryJson.items || [];
+  const allItems = (galleryJson.items || []).map(normalizeGalleryItem);
 
   const tags = Array.from(new Set(allItems.map((x) => x.tag).filter(Boolean)))
     .map((t) => String(t).toUpperCase())
