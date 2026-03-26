@@ -2,7 +2,8 @@ import { SITE, route } from "./site-config.js";
 const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260227-3";
 const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
 const SHOWCASE_EXCLUDED_ASSET_IDS = new Set([
-  "01b2910354b64b7f9de538fdb21aac02"
+  "01b2910354b64b7f9de538fdb21aac02",
+  "3673e0f067f0455eacef75809d1a9212"
 ]);
 const SHOWCASE_PREFERRED_ASSET_IDS = {
   A: [
