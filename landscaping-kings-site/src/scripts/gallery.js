@@ -1,6 +1,9 @@
 import { SITE, route } from "./site-config.js";
 const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260227-3";
 const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
+const SHOWCASE_EXCLUDED_ASSET_IDS = new Set([
+  "01b2910354b64b7f9de538fdb21aac02"
+]);
 const SHOWCASE_PREFERRED_ASSET_IDS = {
   A: [
     "bfcaaffbd8d24aaa8141f5908fc1086d",
@@ -11,13 +14,13 @@ const SHOWCASE_PREFERRED_ASSET_IDS = {
     "8108c19843f047179be9612d23a96fac"
   ],
   C: ["b3f36b7ba8e84f799a9ee8304d314caf"],
-  D: [
-    "01b2910354b64b7f9de538fdb21aac02",
-    "75e9e3e54aca45ae8dd43850b35ae70c"
-  ],
-  E: [null, "7231049908d84afaab32f91eb16874b0"],
+  D: [null, "75e9e3e54aca45ae8dd43850b35ae70c"],
+  E: ["7231049908d84afaab32f91eb16874b0"],
   G: ["9d99902a11694b8a84b7a804ed644cf2"],
   I: ["2f08f71b3ead4dbc8db387a632dca685"],
+};
+const SHOWCASE_IMAGE_OBJECT_POSITIONS = {
+  "9d99902a11694b8a84b7a804ed644cf2": "50% 22%"
 };
 
 function getShowcasePreferredId(tag, occurrence) {
@@ -60,6 +63,10 @@ function normalizeGalleryItem(item) {
     src: rewriteAdobeImageUrl(item?.src),
     thumb: rewriteAdobeImageUrl(item?.thumb),
   };
+}
+
+function isShowcaseExcluded(item) {
+  return SHOWCASE_EXCLUDED_ASSET_IDS.has(String(item?.id || ""));
 }
 
 async function loadJson(path) {
@@ -129,6 +136,7 @@ function pickShowcaseItems(items, categories, limit = 12) {
   const fallback = [];
 
   for (const item of items) {
+    if (isShowcaseExcluded(item)) continue;
     const tag = String(item.tag || "").toUpperCase();
     if (buckets.has(tag)) buckets.get(tag).push(item);
     else fallback.push(item);
@@ -148,7 +156,10 @@ function pickShowcaseItems(items, categories, limit = 12) {
 
       if (preferredId) {
         nextItem = items.find(
-          (item) => String(item.id || "") === preferredId && !usedIds.has(preferredId)
+          (item) =>
+            String(item.id || "") === preferredId &&
+            !usedIds.has(preferredId) &&
+            !isShowcaseExcluded(item)
         );
       }
 
@@ -169,7 +180,7 @@ function pickShowcaseItems(items, categories, limit = 12) {
   if (picked.length < limit) {
     for (const item of fallback) {
       const itemId = String(item.id || "");
-      if (usedIds.has(itemId)) continue;
+      if (usedIds.has(itemId) || isShowcaseExcluded(item)) continue;
       picked.push({ item, displayTag: String(item.tag || "").toUpperCase() });
       usedIds.add(itemId);
       if (picked.length >= limit) break;
@@ -186,9 +197,11 @@ function createShowcaseTile(item, categoryLabel, idx) {
   btn.dataset.index = String(idx);
   btn.dataset.itemId = String(item.id || "");
   btn.setAttribute("aria-label", `Open ${categoryLabel} image`);
+  const objectPosition = SHOWCASE_IMAGE_OBJECT_POSITIONS[String(item.id || "")];
+  const imageStyle = objectPosition ? ` style="object-position:${objectPosition}"` : "";
 
   btn.innerHTML = `
-    <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async" />
+    <img src="${item.thumb || item.src}" alt="${item.alt || ""}" loading="lazy" decoding="async"${imageStyle} />
     <span class="showcaseBadge" aria-hidden="true">
       <img src="${TILE_BADGE_SRC}" alt="" loading="lazy" decoding="async" />
     </span>
