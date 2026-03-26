@@ -2,13 +2,30 @@ import { SITE, route } from "./site-config.js";
 const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260227-3";
 const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
 const SHOWCASE_PREFERRED_ASSET_IDS = {
-  A: "bfcaaffbd8d24aaa8141f5908fc1086d",
-  B: "d2c2a6d4e14c43cb9869d46ece81fa6b",
-  C: "b3f36b7ba8e84f799a9ee8304d314caf",
-  D: "01b2910354b64b7f9de538fdb21aac02",
-  G: "9d99902a11694b8a84b7a804ed644cf2",
-  I: "2f08f71b3ead4dbc8db387a632dca685",
+  A: [
+    "bfcaaffbd8d24aaa8141f5908fc1086d",
+    "c68d6cb1eff34a8cb4110b365e254ba3"
+  ],
+  B: [
+    "d2c2a6d4e14c43cb9869d46ece81fa6b",
+    "8108c19843f047179be9612d23a96fac"
+  ],
+  C: ["b3f36b7ba8e84f799a9ee8304d314caf"],
+  D: [
+    "01b2910354b64b7f9de538fdb21aac02",
+    "75e9e3e54aca45ae8dd43850b35ae70c"
+  ],
+  E: [null, "7231049908d84afaab32f91eb16874b0"],
+  G: ["9d99902a11694b8a84b7a804ed644cf2"],
+  I: ["2f08f71b3ead4dbc8db387a632dca685"],
 };
+
+function getShowcasePreferredId(tag, occurrence) {
+  const config = SHOWCASE_PREFERRED_ASSET_IDS[tag];
+  if (!config) return "";
+  if (Array.isArray(config)) return String(config[occurrence] || "").trim();
+  return occurrence === 0 ? String(config || "").trim() : "";
+}
 
 function lbDebug(...args) {
   if (!DEBUG_LIGHTBOX) return;
@@ -119,26 +136,30 @@ function pickShowcaseItems(items, categories, limit = 12) {
 
   const picked = [];
   const usedIds = new Set();
-
-  for (const tag of orderedTags) {
-    if (picked.length >= limit) break;
-    const preferredId = SHOWCASE_PREFERRED_ASSET_IDS[tag];
-    if (!preferredId) continue;
-    const preferredItem = items.find((item) => String(item.id || "") === preferredId);
-    if (!preferredItem || usedIds.has(preferredId)) continue;
-    picked.push({ item: preferredItem, displayTag: tag });
-    usedIds.add(preferredId);
-  }
+  const occurrenceByTag = new Map(orderedTags.map((tag) => [tag, 0]));
 
   while (picked.length < limit) {
     let added = false;
     for (const tag of orderedTags) {
-      const bucket = buckets.get(tag);
-      if (!bucket || !bucket.length) continue;
-      const nextItem = bucket.find((item) => !usedIds.has(String(item.id || "")));
+      const bucket = buckets.get(tag) || [];
+      const occurrence = occurrenceByTag.get(tag) || 0;
+      const preferredId = getShowcasePreferredId(tag, occurrence);
+      let nextItem = null;
+
+      if (preferredId) {
+        nextItem = items.find(
+          (item) => String(item.id || "") === preferredId && !usedIds.has(preferredId)
+        );
+      }
+
+      if (!nextItem) {
+        nextItem = bucket.find((item) => !usedIds.has(String(item.id || "")));
+      }
+
       if (!nextItem) continue;
       picked.push({ item: nextItem, displayTag: tag });
       usedIds.add(String(nextItem.id || ""));
+      occurrenceByTag.set(tag, occurrence + 1);
       added = true;
       if (picked.length >= limit) break;
     }
