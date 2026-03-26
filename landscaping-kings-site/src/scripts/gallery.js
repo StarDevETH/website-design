@@ -1,6 +1,14 @@
 import { SITE, route } from "./site-config.js";
 const TILE_BADGE_SRC = "/assets/logo-bush.png?v=20260227-3";
 const DEBUG_LIGHTBOX = new URL(window.location.href).searchParams.get("debugLightbox") === "1";
+const SHOWCASE_PREFERRED_ASSET_IDS = {
+  A: "bfcaaffbd8d24aaa8141f5908fc1086d",
+  B: "d2c2a6d4e14c43cb9869d46ece81fa6b",
+  C: "b3f36b7ba8e84f799a9ee8304d314caf",
+  D: "01b2910354b64b7f9de538fdb21aac02",
+  G: "9d99902a11694b8a84b7a804ed644cf2",
+  I: "2f08f71b3ead4dbc8db387a632dca685",
+};
 
 function lbDebug(...args) {
   if (!DEBUG_LIGHTBOX) return;
@@ -110,12 +118,27 @@ function pickShowcaseItems(items, categories, limit = 12) {
   }
 
   const picked = [];
+  const usedIds = new Set();
+
+  for (const tag of orderedTags) {
+    if (picked.length >= limit) break;
+    const preferredId = SHOWCASE_PREFERRED_ASSET_IDS[tag];
+    if (!preferredId) continue;
+    const preferredItem = items.find((item) => String(item.id || "") === preferredId);
+    if (!preferredItem || usedIds.has(preferredId)) continue;
+    picked.push({ item: preferredItem, displayTag: tag });
+    usedIds.add(preferredId);
+  }
+
   while (picked.length < limit) {
     let added = false;
     for (const tag of orderedTags) {
       const bucket = buckets.get(tag);
       if (!bucket || !bucket.length) continue;
-      picked.push(bucket.shift());
+      const nextItem = bucket.find((item) => !usedIds.has(String(item.id || "")));
+      if (!nextItem) continue;
+      picked.push({ item: nextItem, displayTag: tag });
+      usedIds.add(String(nextItem.id || ""));
       added = true;
       if (picked.length >= limit) break;
     }
@@ -124,7 +147,10 @@ function pickShowcaseItems(items, categories, limit = 12) {
 
   if (picked.length < limit) {
     for (const item of fallback) {
-      picked.push(item);
+      const itemId = String(item.id || "");
+      if (usedIds.has(itemId)) continue;
+      picked.push({ item, displayTag: String(item.tag || "").toUpperCase() });
+      usedIds.add(itemId);
       if (picked.length >= limit) break;
     }
   }
@@ -480,8 +506,8 @@ async function runGallery() {
     const featured = pickShowcaseItems(allItems, categories, 12);
     showcase.replaceChildren();
 
-    featured.forEach((item) => {
-      const label = categories[item.tag] || `Category ${item.tag}`;
+    featured.forEach(({ item, displayTag }) => {
+      const label = categories[displayTag] || `Category ${displayTag}`;
       const globalIndex = allItems.findIndex((x) => x.id === item.id);
       if (globalIndex < 0) return;
       showcase.appendChild(createShowcaseTile(item, label, globalIndex));

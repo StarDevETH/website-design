@@ -33,7 +33,7 @@ const JOB_REQUIRED_RADIOS = [
 ];
 const HERO_REVIEW_SUMMARY = {
   rating: "4.8",
-  count: 29
+  count: 30
 };
 const HERO_REVIEWS = [
   {
